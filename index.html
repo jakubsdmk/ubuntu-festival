@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#ffffff">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#ffffff"></rect><circle cx="50" cy="50" r="26" fill="none" stroke="#ff5c14" stroke-width="7"></circle><circle cx="50" cy="50" r="9" fill="#f0932b"></circle></svg>
+</template>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root { --font-heading: "Figtree", system-ui, sans-serif; --font-body: "Figtree", system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #ffffff; color: #201e1d; font-family: "Figtree", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: "Figtree", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.03em; margin: 0; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  a { text-decoration: none; color: inherit; }
+  @keyframes floaty { 0%,100% { transform: translate(0,0) } 50% { transform: translate(0,-18px) } }
+  @keyframes shimmer { 0%,100% { opacity: .55 } 50% { opacity: .9 } }
+  @media (max-width: 1100px) {
+    [data-r="bento"] > * { grid-column: span 3 !important; }
+    [data-r="sticky"] { position: static !important; }
+  }
+  @media (max-width: 900px) {
+    [data-r="two"], [data-r="three"] { grid-template-columns: 1fr !important; }
+    [data-r="bento"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [data-r="bento"] > * { grid-column: span 1 !important; }
+    header > div > nav { min-width: 0 !important; flex: 1 1 auto !important; }
+    header > div > nav > a { flex: 0 0 auto !important; }
+    [data-r="navlinks"] { overflow-x: auto !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; min-width: 0 !important; flex: 1 1 auto !important; }
+    [data-r="navlinks"]::-webkit-scrollbar { display: none; }
+    [data-r="navlinks"] > a { white-space: nowrap; padding: 8px 11px !important; font-size: 13.5px !important; }
+    [data-r="brandtext"] { display: none !important; }
+    section, footer { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+  @media (max-width: 620px) {
+    [data-r="bento"], [data-r="two-s"] { grid-template-columns: 1fr !important; }
+    [data-r="stack"] { flex-direction: column !important; align-items: flex-start !important; }
+    [data-r="daycard"] { flex-wrap: wrap !important; }
+    header > div > nav > a { display: none !important; }
+    [data-r="navlinks"] { flex: 0 1 auto !important; }
+  }
+</style>
+</helmet>
+
+<div style="background:#ffffff">
+
+  <header style="position:sticky; top:0; z-index:60; background:rgba(255,255,255,.82); backdrop-filter:blur(16px) saturate(1.6); border-bottom:1px solid rgba(32,30,29,.07)">
+    <div style="max-width:1240px; margin:0 auto; padding:12px 32px; display:flex; align-items:center; gap:32px">
+      <a href="#top" style="display:flex; align-items:center; gap:12px; flex-shrink:0">
+        <img src="uploads/UF_Logo.png" alt="Ubuntu Offline Festival" style="width:auto; height:97px; object-fit:contain; display:block">
+        <span data-r="brandtext" style="display:none; flex-direction:column; line-height:1.05">
+          <span style="font-size:15px; font-weight:800; letter-spacing:-0.02em">Ubuntu Offline Festival</span>
+          <span style="font-size:12px; font-weight:500; color:#8a8580; letter-spacing:.01em">11.–13. 9. 2026 · Řehenický dvorek</span>
+        </span>
+      </a>
+      <nav style="margin-left:auto; display:flex; align-items:center; gap:4px">
+        <span data-r="navlinks" style="display:flex; align-items:center; gap:4px">
+        <a href="#festival" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Festival</a>
+        <a href="#program" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Program</a>
+        <a href="#vstupenky" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Vstupenky</a>
+        <a href="#info" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Info</a>
+        </span>
+        <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="margin-left:10px; display:inline-flex; align-items:center; gap:8px; background:#201e1d; color:#fff; font-size:14.5px; font-weight:700; padding:11px 20px; border-radius:999px; box-shadow:0 1px 2px rgba(32,30,29,.2)" style-hover="background:#3a3532">
+          Koupit vstupenku
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="top" style="position:relative; overflow:hidden; background:linear-gradient(180deg,#fdf3e6 0%,#fdf6ec 55%,#ffffff 100%); padding:clamp(56px,7vw,104px) 32px clamp(48px,6vw,88px)">
+    <div style="position:absolute; top:-160px; right:-120px; width:620px; height:620px; border-radius:999px; background:radial-gradient(circle at 35% 35%, rgba(255,138,42,.20), rgba(255,196,86,.10) 45%, rgba(255,255,255,0) 70%); animation:shimmer 9s ease-in-out infinite; pointer-events:none"></div>
+    <div style="position:absolute; bottom:-220px; left:-140px; width:520px; height:520px; border-radius:999px; background:radial-gradient(circle at 50% 50%, rgba(122,138,94,.14), rgba(255,255,255,0) 68%); pointer-events:none"></div>
+
+    <div style="position:relative; max-width:1240px; margin:0 auto">
+      <div data-r="two" style="display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr); gap:clamp(36px,4.5vw,72px); align-items:center">
+        <div>
+          <div style="display:inline-flex; align-items:center; gap:9px; padding:7px 8px 7px 7px; border:1px solid rgba(32,30,29,.1); border-radius:999px; background:#fff; box-shadow:0 1px 2px rgba(32,30,29,.04); margin-bottom:26px">
+            <span style="display:inline-flex; align-items:center; gap:6px; background:#fff3e6; color:#a2521f; font-size:12px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:5px 11px; border-radius:999px">
+              <span style="width:6px; height:6px; border-radius:999px; background:#ff5c14; display:block"></span>
+              Nultý ročník
+            </span>
+            <span style="font-size:13px; font-weight:600; color:#6b6560; padding-right:8px">Kapacita je omezená</span>
+          </div>
+
+          <h1 style="font-size:clamp(48px,5.6vw,84px); line-height:.96; margin-bottom:26px; text-wrap:balance">
+            Ubuntu<br>Offline<br><span style="background:linear-gradient(96deg,#ff5c14 0%,#f0932b 42%,#f5c25b 100%); -webkit-background-clip:text; background-clip:text; color:transparent">Festival</span>
+          </h1>
+
+          <p style="font-size:clamp(17px,1.35vw,20px); line-height:1.62; color:#4a4643; max-width:46ch; margin-bottom:34px; text-wrap:pretty">
+            Třídenní festival kousek od Prahy. Živá hudba, přednášky, tvoření, pohyb, dobré jídlo, společné chvíle a prostor být víc spolu než na obrazovkách.
+          </p>
+
+          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:38px">
+            <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; font-size:16px; font-weight:700; padding:15px 28px; border-radius:999px; box-shadow:0 10px 22px -10px rgba(233,84,26,.75), inset 0 1px 0 rgba(255,255,255,.28)" style-hover="filter:brightness(1.05)">
+              Koupit vstupenku
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </a>
+            <a href="#festival" style="display:inline-flex; align-items:center; gap:9px; background:#fff; color:#201e1d; font-size:16px; font-weight:700; padding:15px 26px; border-radius:999px; border:1px solid rgba(32,30,29,.14)" style-hover="background:#faf7f2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              Více info
+            </a>
+          </div>
+
+          <div data-r="stack" style="display:flex; align-items:center; gap:20px; padding-top:26px; border-top:1px solid rgba(32,30,29,.08); flex-wrap:wrap">
+            <div>
+              <p style="font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#6b6560; margin-bottom:5px">Kdy</p>
+              <p style="font-size:15.5px; font-weight:700">11.–13. září 2026</p>
+            </div>
+            <div style="width:1px; height:34px; background:rgba(32,30,29,.1)"></div>
+            <div>
+              <p style="font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#6b6560; margin-bottom:5px">Kde</p>
+              <p style="font-size:15.5px; font-weight:700">Řehenický dvorek</p>
+            </div>
+            <div style="width:1px; height:34px; background:rgba(32,30,29,.1)"></div>
+            <div>
+              <p style="font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#6b6560; margin-bottom:5px">Od</p>
+              <p style="font-size:15.5px; font-weight:700">900 Kč</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative; min-width:0">
+          <div style="position:absolute; inset:-16px; border-radius:32px; background:linear-gradient(150deg, rgba(255,138,42,.22), rgba(122,138,94,.16)); filter:blur(26px); pointer-events:none"></div>
+          <div style="position:relative; border-radius:26px; overflow:hidden; box-shadow:0 34px 70px -34px rgba(32,30,29,.5), 0 2px 6px rgba(32,30,29,.06); border:1px solid rgba(255,255,255,.7)">
+            <image-slot id="ubuntu-hero" shape="rect" style="width:100%; height:clamp(360px,44vw,580px); display:block" placeholder="Hlavní fotka festivalu"></image-slot>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="festival" style="padding:clamp(56px,7vw,104px) 32px; background:linear-gradient(180deg,#ffffff 0%, #fdfbf7 100%)">
+    <div style="max-width:1240px; margin:0 auto">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-bottom:clamp(32px,4vw,52px)">
+        <div style="max-width:60ch">
+          <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+            <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+            Zažij premiérový ročník
+          </p>
+          <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05; margin-bottom:20px; text-wrap:balance">Tři dny v přírodě</h2>
+          <p style="font-size:17.5px; line-height:1.72; color:#4a4643">Čeká tě živá hudba, inspirativní přednášky osobností z oblasti zdraví, vztahů a spokojeného života, chutné a výživné jídlo, vyhřívaná relax zóna, workshopy, dílny, výběrový jarmark lokálních tvůrců a značek, čajovna, jóga, tanec pod širým nebem, meditace a mnoho dalšího.</p>
+        </div>
+        <div style="max-width:38ch; padding:22px 24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.08); box-shadow:0 12px 28px -22px rgba(32,30,29,.5)">
+          <p style="font-size:15px; line-height:1.68; color:#4a4643">Festival je vědomou akcí <strong style="color:#201e1d">bez drog a alkoholu</strong>. Telefony návštěvníkům neodebíráme ani jejich používání nezakazujeme. Myšlenkou je vytvořit prostředí, ve kterém můžeme obrazovky odložit a věnovat pozornost společným zážitkům.</p>
+        </div>
+      </div>
+
+      <div data-r="bento" style="display:grid; grid-template-columns:repeat(6,1fr); gap:16px">
+
+        <div style="grid-column:span 3; position:relative; overflow:hidden; padding:30px; border-radius:24px; background:linear-gradient(155deg,#201e1d,#332e2a); color:#fff; min-height:210px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 22px 44px -30px rgba(32,30,29,.9)">
+          <div style="position:absolute; top:-70px; right:-50px; width:230px; height:230px; border-radius:999px; background:radial-gradient(circle,rgba(255,92,20,.42),rgba(255,92,20,0) 68%)"></div>
+          <span style="position:relative; width:46px; height:46px; border-radius:14px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+          </span>
+          <div style="position:relative">
+            <h3 style="font-size:24px; margin-bottom:8px">Živá hudba a koncerty</h3>
+            <p style="font-size:15px; line-height:1.6; color:rgba(255,255,255,.72)">DJ sety, večerní hudební program, jamování a společné zpívání u ohně.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 3; padding:30px; border-radius:24px; background:#fff; border:1px solid rgba(32,30,29,.08); min-height:210px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 14px 30px -26px rgba(32,30,29,.6)">
+          <span style="width:46px; height:46px; border-radius:14px; background:#fff3e6; color:#a2521f; display:flex; align-items:center; justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5c0 1.9.9 3 1.7 4 .5.7.8 1.4.8 2.2V14h5v-.8c0-.8.3-1.5.8-2.2.8-1 1.7-2.1 1.7-4a5 5 0 0 0-5-5Z"></path><path d="M9.5 18h5"></path><path d="M10 21.5h4"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:24px; margin-bottom:8px">Přednášky a setkání</h3>
+            <p style="font-size:15px; line-height:1.6; color:#6b6560">Rozhovory s osobnostmi z oblasti zdraví, vztahů a spokojeného života.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 2; padding:26px; border-radius:24px; background:#faf7f2; border:1px solid rgba(32,30,29,.06); min-height:190px; display:flex; flex-direction:column; justify-content:space-between">
+          <span style="width:42px; height:42px; border-radius:13px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4"></path><path d="M13 7 8.7 2.7a2.4 2.4 0 0 0-3.4 0L2.7 5.3a2.4 2.4 0 0 0 0 3.4L7 13"></path><path d="m8 6-6 6 4 4 6-6"></path><path d="m17 11 4.3 4.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L11 17"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:20px; margin-bottom:6px">Workshopy a dílny</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#6b6560">Kreativní a zážitkové tvoření v malých skupinách.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 2; padding:26px; border-radius:24px; background:#eef3e3; border:1px solid rgba(122,138,94,.18); min-height:190px; display:flex; flex-direction:column; justify-content:space-between">
+          <span style="width:42px; height:42px; border-radius:13px; background:#fff; color:#5c6b45; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.2"></circle><path d="M12 7v6"></path><path d="m5 10 7 3 7-3"></path><path d="m8.5 21 3.5-8 3.5 8"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:20px; margin-bottom:6px">Jóga, tanec, meditace</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#5f6a4c">Pohybový program pod širým nebem od rána.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 2; padding:26px; border-radius:24px; background:#faf7f2; border:1px solid rgba(32,30,29,.06); min-height:190px; display:flex; flex-direction:column; justify-content:space-between">
+          <span style="width:42px; height:42px; border-radius:13px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v7a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"></path><path d="M6 12v10"></path><path d="M18 2c-1.8 1.6-3 4-3 7s1.2 4 3 4v9"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:20px; margin-bottom:6px">Jídlo, čajovna, kavárna</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#6b6560">Zdravý vegetariánský catering po celý den.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 4; padding:26px; border-radius:24px; background:#fff; border:1px solid rgba(32,30,29,.08); min-height:190px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 14px 30px -26px rgba(32,30,29,.6)">
+          <span style="width:42px; height:42px; border-radius:13px; background:#fff3e6; color:#a2521f; display:flex; align-items:center; justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18"></path><path d="M5 9V6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5V9"></path><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"></path><path d="M9 20v-6h6v6"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:20px; margin-bottom:6px">Výběrový jarmark lokálních tvůrců</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#6b6560">Značky a řemeslníci, se kterými se vyplatí dát do řeči. Plus hry, komunitní aktivity a mistři v umění se nebrat vážně.</p>
+          </div>
+        </div>
+
+        <div style="grid-column:span 2; padding:26px; border-radius:24px; background:linear-gradient(155deg,#5c6b45,#42502f); color:#fff; min-height:190px; display:flex; flex-direction:column; justify-content:space-between">
+          <span style="width:42px; height:42px; border-radius:13px; background:rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c1.6-1.4 3.4-1.4 5 0s3.4 1.4 5 0 3.4-1.4 5 0 3.4 1.4 5 0"></path><path d="M2 21c1.6-1.4 3.4-1.4 5 0s3.4 1.4 5 0 3.4-1.4 5 0 3.4 1.4 5 0"></path><path d="M9 11V6"></path><path d="M15 11V4"></path></svg>
+          </span>
+          <div>
+            <h3 style="font-size:20px; margin-bottom:6px">Vyhřívaná relax zóna</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:rgba(255,255,255,.74)">S jezírkem, otevřená každý večer od 18:00.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="program" style="padding:clamp(56px,7vw,104px) 32px; background:#fdfbf7">
+    <div style="max-width:1240px; margin:0 auto">
+      <div data-r="two" style="display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(36px,4.5vw,72px); align-items:start">
+        <div data-r="sticky" style="position:sticky; top:104px">
+          <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+            <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+            Program
+          </p>
+          <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05; margin-bottom:20px">Tři dny,<br>jeden rytmus</h2>
+          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:36ch">Žádné přebíhání mezi deseti pódii. Detailní program zveřejníme na jaře.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <div data-r="daycard" style="display:flex; align-items:center; gap:22px; padding:26px 28px; border-radius:22px; background:#fff; border:1px solid rgba(32,30,29,.08); box-shadow:0 14px 30px -28px rgba(32,30,29,.6)">
+            <span style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:70px; height:70px; border-radius:20px; background:#fff3e6; color:#a2521f; flex-shrink:0">
+              <span style="font-size:24px; font-weight:900; line-height:1">11</span>
+              <span style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase">Pá</span>
+            </span>
+            <div style="flex:1; min-width:0">
+              <h3 style="font-size:21px; margin-bottom:5px">Pátek 11. 9.</h3>
+              <p style="font-size:15px; color:#6b6560">Festivalový program od 14:00</p>
+            </div>
+            <span style="font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#a2521f; background:#fff3e6; padding:7px 13px; border-radius:999px; white-space:nowrap">Otevření</span>
+          </div>
+
+          <div data-r="daycard" style="display:flex; align-items:center; gap:22px; padding:26px 28px; border-radius:22px; background:#f5ead8; border:1px solid rgba(198,113,57,.22); box-shadow:0 18px 38px -30px rgba(162,82,31,.6)">
+            <span style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:70px; height:70px; border-radius:20px; background:#fff; color:#a2521f; flex-shrink:0; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+              <span style="font-size:24px; font-weight:900; line-height:1">12</span>
+              <span style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase">So</span>
+            </span>
+            <div style="flex:1; min-width:0">
+              <h3 style="font-size:21px; margin-bottom:5px">Sobota 12. 9.</h3>
+              <p style="font-size:15px; color:#6b6560">Celodenní program</p>
+            </div>
+            <span style="font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#fff; background:linear-gradient(96deg,#ff6a22,#f0932b); padding:7px 13px; border-radius:999px; white-space:nowrap">Hlavní den</span>
+          </div>
+
+          <div data-r="daycard" style="display:flex; align-items:center; gap:22px; padding:26px 28px; border-radius:22px; background:#fff; border:1px solid rgba(32,30,29,.08); box-shadow:0 14px 30px -28px rgba(32,30,29,.6)">
+            <span style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:70px; height:70px; border-radius:20px; background:#eef3e3; color:#5c6b45; flex-shrink:0">
+              <span style="font-size:24px; font-weight:900; line-height:1">13</span>
+              <span style="font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase">Ne</span>
+            </span>
+            <div style="flex:1; min-width:0">
+              <h3 style="font-size:21px; margin-bottom:5px">Neděle 13. 9.</h3>
+              <p style="font-size:15px; color:#6b6560">Program od 10:00</p>
+            </div>
+            <span style="font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#5c6b45; background:#eef3e3; padding:7px 13px; border-radius:999px; white-space:nowrap">Doznívání</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vstupenky" style="padding:clamp(56px,7vw,104px) 32px; background:#fff">
+    <div style="max-width:1240px; margin:0 auto">
+      <div style="text-align:center; margin-bottom:clamp(32px,4vw,52px)">
+        <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+          <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+          Vstupenky
+        </p>
+        <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05; margin-bottom:16px">Vyber si svůj formát</h2>
+        <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto">Sleva pro místní obyvatele 30 % z ceny vstupenky po prokázání občanským průkazem na vstupu.</p>
+      </div>
+
+      <div data-r="three" style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:stretch">
+
+        <div style="display:flex; flex-direction:column; padding:30px; border-radius:26px; background:#fdfbf7; border:1px solid rgba(32,30,29,.08)">
+          <p style="font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6b6560; margin-bottom:12px">Neděle</p>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px">
+            <span style="font-size:42px; font-weight:900; letter-spacing:-.04em">900</span>
+            <span style="font-size:17px; font-weight:700; color:#6b6560">Kč</span>
+          </div>
+          <p style="font-size:14px; color:#8a8580; margin-bottom:22px">Na místě 1 000 Kč</p>
+          <ul style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px">
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Nedělní program od 10:00</li>
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Platí do 23:55</li>
+          </ul>
+          <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="margin-top:auto; display:block; text-align:center; font-size:15px; font-weight:700; padding:14px; border-radius:999px; background:#fff; border:1px solid rgba(32,30,29,.14)" style-hover="background:#f6f2ec">Vybrat</a>
+        </div>
+
+        <div style="display:flex; flex-direction:column; padding:30px; border-radius:26px; background:#f5ead8; border:1px solid rgba(198,113,57,.24); box-shadow:0 26px 52px -34px rgba(162,82,31,.6)">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px">
+            <p style="font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#a2521f">3denní / pá–ne</p>
+            <span style="font-size:11px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; background:linear-gradient(96deg,#ff6a22,#f0932b); color:#fff; padding:6px 12px; border-radius:999px; white-space:nowrap">Nejoblíbenější</span>
+          </div>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px">
+            <span style="font-size:42px; font-weight:900; letter-spacing:-.04em">1 799</span>
+            <span style="font-size:17px; font-weight:700; color:#6b6560">Kč</span>
+          </div>
+          <p style="font-size:14px; color:#8a8580; margin-bottom:22px">Na místě 2 000 Kč</p>
+          <ul style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px">
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c67139" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Celý festival, všechny tři dny</li>
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c67139" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Pátek 14:00 – neděle 23:55</li>
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c67139" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Relax zóna každý večer</li>
+          </ul>
+          <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:9px; font-size:15px; font-weight:700; padding:14px; border-radius:999px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; box-shadow:0 10px 22px -12px rgba(233,84,26,.9)" style-hover="filter:brightness(1.06)">
+            Koupit vstupenku
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+        </div>
+
+        <div style="display:flex; flex-direction:column; padding:30px; border-radius:26px; background:#fdfbf7; border:1px solid rgba(32,30,29,.08)">
+          <p style="font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6b6560; margin-bottom:12px">2denní / pá–so</p>
+          <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:6px">
+            <span style="font-size:42px; font-weight:900; letter-spacing:-.04em">1 300</span>
+            <span style="font-size:17px; font-weight:700; color:#6b6560">Kč</span>
+          </div>
+          <p style="font-size:14px; color:#8a8580; margin-bottom:22px">Na místě 1 400 Kč</p>
+          <ul style="display:flex; flex-direction:column; gap:11px; margin-bottom:26px">
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Pátek a sobota</li>
+            <li style="display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:#4a4643"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>Pátek 14:00 – sobota 23:55</li>
+          </ul>
+          <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="margin-top:auto; display:block; text-align:center; font-size:15px; font-weight:700; padding:14px; border-radius:999px; background:#fff; border:1px solid rgba(32,30,29,.14)" style-hover="background:#f6f2ec">Vybrat</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,7vw,104px) 32px; background:#fdfbf7">
+    <div data-r="two" style="max-width:1240px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(36px,4.5vw,72px); align-items:center">
+      <div style="position:relative; border-radius:26px; overflow:hidden; box-shadow:0 30px 60px -36px rgba(32,30,29,.6); border:1px solid rgba(32,30,29,.06)">
+        <image-slot id="ubuntu-misto" shape="rect" style="width:100%; height:clamp(320px,40vw,500px); display:block" placeholder="Řehenický dvorek"></image-slot>
+      </div>
+      <div>
+        <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#5c6b45; margin-bottom:16px">
+          <span style="width:20px; height:2px; background:#7a8a5e; border-radius:2px; display:block"></span>
+          Místo konání
+        </p>
+        <h2 style="font-size:clamp(32px,3.4vw,48px); line-height:1.06; margin-bottom:18px">Řehenický dvorek</h2>
+        <p style="font-size:17px; line-height:1.72; color:#4a4643; max-width:42ch; margin-bottom:26px">Festival se uskuteční v přírodním areálu kousek od Prahy. Program bude probíhat venku, v jurtách, u ohniště i v tepee.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px">
+          <div style="padding:16px 20px; border-radius:18px; background:#fff; border:1px solid rgba(32,30,29,.08)">
+            <p style="font-size:11.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b6560; margin-bottom:5px">Adresa</p>
+            <p style="font-size:15.5px; font-weight:700">Řehenice 34, 251 67</p>
+          </div>
+          <div style="padding:16px 20px; border-radius:18px; background:#fff; border:1px solid rgba(32,30,29,.08)">
+            <p style="font-size:11.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b6560; margin-bottom:5px">Z Prahy</p>
+            <p style="font-size:15.5px; font-weight:700">cca 40 minut</p>
+          </div>
+        </div>
+        <a href="https://mapy.cz/?q=49.871119,14.648401" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-size:15px; font-weight:700; padding:14px 26px; border-radius:999px; background:#201e1d; color:#fff" style-hover="background:#3a3532">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+          Otevřít navigaci
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="info" style="padding:clamp(56px,7vw,104px) 32px; background:#fff">
+    <div style="max-width:1240px; margin:0 auto">
+      <div style="margin-bottom:clamp(32px,4vw,52px); max-width:56ch">
+        <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+          <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+          Praktické informace
+        </p>
+        <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05">Ať máš klid ještě před příjezdem</h2>
+      </div>
+
+      <div data-r="bento" style="display:grid; grid-template-columns:repeat(6,1fr); gap:16px">
+
+        <div style="grid-column:span 2; padding:28px; border-radius:24px; background:#fdfbf7; border:1px solid rgba(32,30,29,.07)">
+          <span style="width:44px; height:44px; border-radius:14px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; margin-bottom:18px; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14"></path><path d="M4 17V9.5L6 5h12l2 4.5V17"></path><circle cx="7.5" cy="17" r="2"></circle><circle cx="16.5" cy="17" r="2"></circle></svg>
+          </span>
+          <h3 style="font-size:20px; margin-bottom:10px">Doprava a parkování</h3>
+          <p style="font-size:14.5px; line-height:1.68; color:#6b6560; margin-bottom:16px">Parkovat bude možné přímo v areálu a jeho okolí, kapacita je ale omezená. Preferujeme spolujízdu nebo MHD.</p>
+          <ul style="display:flex; flex-direction:column; gap:8px">
+            <li style="display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px; padding:9px 13px; border-radius:12px; background:#fff; border:1px solid rgba(32,30,29,.06)"><span style="color:#4a4643">Mimo areál</span><strong>150 Kč</strong></li>
+            <li style="display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px; padding:9px 13px; border-radius:12px; background:#fff; border:1px solid rgba(32,30,29,.06)"><span style="color:#4a4643">V areálu / noc</span><strong>200 Kč</strong></li>
+          </ul>
+          <p style="font-size:13px; color:#6b6560; margin-top:12px">V autě lze i přespat.</p>
+        </div>
+
+        <div style="grid-column:span 2; padding:28px; border-radius:24px; background:#fdfbf7; border:1px solid rgba(32,30,29,.07)">
+          <span style="width:44px; height:44px; border-radius:14px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; margin-bottom:18px; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v6a4 4 0 0 0 8 0V3"></path><path d="M8 13v8"></path><path d="M18 3c-1.7 1.6-3 4-3 7s1.3 4 3 4v7"></path></svg>
+          </span>
+          <h3 style="font-size:20px; margin-bottom:10px">Jídlo a pití</h3>
+          <p style="font-size:14.5px; line-height:1.68; color:#6b6560; margin-bottom:14px">Po celé tři dny bude v areálu zdravý vegetariánský catering. Kávu, čaje, domácí dobroty a chlazené nápoje zajistí Čajovna pod Moruší.</p>
+          <p style="font-size:14px; line-height:1.6; color:#4a4643; padding:12px 14px; border-radius:14px; background:#fff3e6">Alergie nebo speciální strava? Napište předem na <strong style="white-space:nowrap">info@ubuntu-planet.com</strong></p>
+        </div>
+
+        <div style="grid-column:span 2; padding:28px; border-radius:24px; background:linear-gradient(155deg,#5c6b45,#42502f); color:#fff">
+          <span style="width:44px; height:44px; border-radius:14px; background:rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; margin-bottom:18px">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6"></path></svg>
+          </span>
+          <h3 style="font-size:20px; margin-bottom:10px">Ekologický provoz</h3>
+          <p style="font-size:14.5px; line-height:1.68; color:rgba(255,255,255,.76)">V areálu funguje vlastní čistička odpadních vod. Vezměte si proto pouze šetrnou, biologicky odbouratelnou kosmetiku a drogerii.</p>
+        </div>
+
+        <div style="grid-column:span 3; padding:28px; border-radius:24px; background:#fdfbf7; border:1px solid rgba(32,30,29,.07)">
+          <span style="width:44px; height:44px; border-radius:14px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; margin-bottom:18px; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"></path><path d="M4 13V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"></path><path d="M7 10h4"></path><path d="M13 10h4"></path></svg>
+          </span>
+          <h3 style="font-size:20px; margin-bottom:10px">Ubytování</h3>
+          <p style="font-size:14.5px; line-height:1.68; color:#6b6560; margin-bottom:18px">Ubytovat se lze přímo v prostorách Řehenického dvorku. Některé varianty mají připravené matrace, u dalších může být nutné přivézt si vlastní karimatku nebo matraci. Ubytování si rezervujete a hradíte samostatně u provozovatele areálu.</p>
+          <div style="display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:16px; background:#fff; border:1px solid rgba(32,30,29,.06); flex-wrap:wrap">
+            <span style="width:38px; height:38px; border-radius:999px; background:#eef3e3; color:#5c6b45; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800">VŠ</span>
+            <div style="flex:1; min-width:150px">
+              <p style="font-size:14.5px; font-weight:700">Veronika Štiková</p>
+              <p style="font-size:13.5px; color:#8a8580">+420 792 632 198 · www.rehenickydvorek.cz</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="grid-column:span 3; padding:28px; border-radius:24px; background:#fdfbf7; border:1px solid rgba(32,30,29,.07)">
+          <span style="width:44px; height:44px; border-radius:14px; background:#fff; color:#a2521f; display:flex; align-items:center; justify-content:center; margin-bottom:18px; box-shadow:0 2px 6px rgba(32,30,29,.06)">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 7v13a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7l-3-5Z"></path><path d="M3 7h18"></path><path d="M16 11a4 4 0 0 1-8 0"></path></svg>
+          </span>
+          <h3 style="font-size:20px; margin-bottom:14px">Co si vzít s sebou</h3>
+          <ul data-r="two-s" style="display:grid; grid-template-columns:1fr 1fr; gap:9px 16px">
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Pohodlné oblečení a teplejší vrstvu</li>
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Nepromokavou bundu a pevnou obuv</li>
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Láhev na vodu</li>
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Baterku nebo čelovku</li>
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Karimatku nebo deku na sezení</li>
+            <li style="display:flex; align-items:flex-start; gap:9px; font-size:14.5px; color:#4a4643"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px"><path d="M20 6 9 17l-5-5"></path></svg>Prostěradlo a ručník do relax zóny</li>
+          </ul>
+          <p style="font-size:13px; color:#6b6560; margin-top:14px">Při ubytování si předem ověřte potřebu vlastního spacáku, karimatky nebo matrace.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,7vw,104px) 32px; background:#fdfbf7">
+    <div style="max-width:1240px; margin:0 auto">
+      <div data-r="two" style="display:grid; grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr); gap:clamp(32px,4vw,64px); align-items:start">
+        <div data-r="sticky" style="position:sticky; top:104px">
+          <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+            <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+            FAQ
+          </p>
+          <h2 style="font-size:clamp(32px,3.4vw,48px); line-height:1.06; margin-bottom:18px">Časté otázky</h2>
+          <p style="font-size:16px; line-height:1.7; color:#4a4643; max-width:32ch">Nenašli jste odpověď? Napište na info@ubuntu-planet.com.</p>
+        </div>
+
+        <div data-r="two-s" style="display:grid; grid-template-columns:1fr 1fr; gap:14px">
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Mohu přijet pouze na jeden den?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Ano. Vstupenky jsou ve třech variantách: celý festival od pátku do neděle, pátek + sobota, nebo pouze neděle.</p>
+          </div>
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Co je zahrnuto v ceně vstupenky?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Veškerý festivalový program – koncerty, přednášky, diskuze, pohybové a zážitkové workshopy, společné hry, večerní program a další.</p>
+          </div>
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Je možné parkovat přímo na místě?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Ano, za poplatek. Počet míst je omezený, proto doporučujeme spolujízdu nebo MHD.</p>
+          </div>
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Co se stane v případě nepříznivého počasí?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Festival proběhne i za nepříznivého počasí. Část programu bude možné přesunout do jurt a dalších krytých prostor.</p>
+          </div>
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Je festival určený pouze pro dospělé?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Program je koncipovaný převážně pro dospělé. Děti jsou vítané, samostatný dětský program ani hlídání ale nebudou zajištěny a za dítě odpovídá jeho doprovod.</p>
+          </div>
+          <div style="padding:24px; border-radius:20px; background:#fff; border:1px solid rgba(32,30,29,.07)">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Je festival vhodný i pro člověka, který přijede sám?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:#6b6560">Ano. Program i prostředí jsou vytvořené tak, aby se návštěvníci mohli přirozeně potkávat a zapojovat do společných aktivit.</p>
+          </div>
+          <div style="grid-column:span 2; padding:24px; border-radius:20px; background:#201e1d; color:#fff">
+            <h3 style="font-size:17px; margin-bottom:9px; line-height:1.3">Musím být po celou dobu festivalu offline?</h3>
+            <p style="font-size:14.5px; line-height:1.68; color:rgba(255,255,255,.72)">Ne. Telefony neodebíráme ani nezakazujeme. Offline je pozvánka k tomu věnovat víc pozornosti lidem, programu a společným zážitkům.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:0 32px clamp(56px,7vw,104px); background:#fdfbf7">
+    <div style="max-width:1240px; margin:0 auto; position:relative; overflow:hidden; border-radius:32px; background:linear-gradient(150deg,#201e1d 0%,#3a2f26 55%,#4a3524 100%); color:#fff; padding:clamp(40px,5vw,72px)">
+      <div style="position:absolute; top:-140px; right:-100px; width:460px; height:460px; border-radius:999px; background:radial-gradient(circle,rgba(255,92,20,.4),rgba(255,92,20,0) 68%)"></div>
+      <div style="position:relative; display:flex; align-items:flex-end; justify-content:space-between; gap:36px; flex-wrap:wrap">
+        <div style="max-width:34ch">
+          <h2 style="font-size:clamp(32px,3.6vw,50px); line-height:1.04; margin-bottom:16px; text-wrap:balance">Buď u úplného začátku</h2>
+          <p style="font-size:17px; line-height:1.68; color:rgba(255,255,255,.72)">Komorní počet lidí, inspirativní program a klidná atmosféra. Kapacita je omezená.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; font-size:16px; font-weight:700; padding:16px 30px; border-radius:999px; box-shadow:0 14px 30px -14px rgba(233,84,26,.9)" style-hover="filter:brightness(1.06)">
+            Koupit vstupenku
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+          <span style="font-size:13.5px; color:rgba(255,255,255,.5); text-align:center">Prodej přes BoomEvents</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:clamp(36px,4vw,56px) 32px; background:#fff; border-top:1px solid rgba(32,30,29,.07)">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:28px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:12px">
+        <img src="uploads/UF_Logo.png" alt="Ubuntu Offline Festival" style="width:auto; height:55px; object-fit:contain; display:block">
+        <div>
+          <p style="font-size:15.5px; font-weight:800; letter-spacing:-.02em">Ubuntu Offline Festival</p>
+          <p style="font-size:13.5px; color:#8a8580">11.–13. září 2026 · Řehenický dvorek</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:32px; flex-wrap:wrap; font-size:13.5px; color:#6b6560">
+        <div>
+          <p style="font-size:11.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b6560; margin-bottom:6px">Program a vstupenky</p>
+          <p>info@ubuntu-planet.com</p>
+          <p>+420 721 818 405</p>
+        </div>
+        <div>
+          <p style="font-size:11.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:#6b6560; margin-bottom:6px">Ubytování</p>
+          <p>+420 792 632 198</p>
+          <p>www.rehenickydvorek.cz</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ticketUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://connect.boomevents.org/cs/rehenicky-dvorek-zu-ayaqd/ubuntu-off-line-festival-pzitf&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      ticketUrl: this.props.ticketUrl ?? "https://connect.boomevents.org/cs/rehenicky-dvorek-zu-ayaqd/ubuntu-off-line-festival-pzitf"
+    };
+  }
+}
+
+</script>
+</body>
+</html>
