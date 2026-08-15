@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<script src="https://w.behold.so/widget.js" type="module"></script>
 </head>
 <body>
 <x-dc>
@@ -68,6 +67,14 @@
         <a href="#program" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Program</a>
         <a href="#vstupenky" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Vstupenky</a>
         <a href="#info" style="font-size:14.5px; font-weight:600; color:#4a4643; padding:9px 14px; border-radius:999px" style-hover="background:#f6f2ec; color:#201e1d">Info</a>
+        </span>
+        <span style="display:inline-flex; align-items:center; gap:2px; margin-left:6px">
+          <a href="https://www.instagram.com/festival.ubuntu" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:999px; color:#4a4643" style-hover="background:#f6f2ec; color:#201e1d">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://www.facebook.com/events/2100285667591599?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22home%22%7D%2C%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%2C%22ref_notif_type%22%3Anull%7D" target="_blank" rel="noopener" aria-label="Facebook" style="display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:999px; color:#4a4643" style-hover="background:#f6f2ec; color:#201e1d">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
         </span>
         <a href="{{ ticketUrl }}" target="_blank" rel="noopener" style="margin-left:10px; display:inline-flex; align-items:center; gap:8px; background:#201e1d; color:#fff; font-size:14.5px; font-weight:700; padding:11px 20px; border-radius:999px; box-shadow:0 1px 2px rgba(32,30,29,.2)" style-hover="background:#3a3532">
           Koupit vstupenku
@@ -288,22 +295,27 @@
 
   <section id="instagram" style="padding:clamp(56px,7vw,104px) 32px; background:#fdfbf7; border-top:1px solid rgba(32,30,29,.06)">
     <div style="max-width:1240px; margin:0 auto">
-      <div style="text-align:center; margin-bottom:clamp(32px,4vw,52px)">
-        <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
-          <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
-          Instagram
-        </p>
-        <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05; margin-bottom:16px">Sleduj @ubuntu.planet</h2>
-        <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto">Nejnovější novinky, program a atmosféru z příprav festivalu najdeš na našem Instagramu.</p>
-      </div>
+      <div style="position:relative; overflow:hidden; border-radius:28px; padding:clamp(40px,5vw,68px) clamp(28px,4vw,56px); background:linear-gradient(150deg,#fff4e7 0%,#fdece0 100%); border:1px solid rgba(32,30,29,.08); box-shadow:0 24px 60px -40px rgba(32,30,29,.4); text-align:center">
+        <div style="position:absolute; top:-120px; right:-80px; width:360px; height:360px; border-radius:999px; background:radial-gradient(circle at 40% 40%, rgba(255,138,42,.22), rgba(255,255,255,0) 70%); pointer-events:none"></div>
+        <div style="position:relative">
+          <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
+            <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+            Zůstaň v obraze
+          </p>
+          <h2 style="font-size:clamp(30px,3.4vw,50px); line-height:1.06; margin-bottom:16px; text-wrap:balance">Více informací na našich<br>sociálních sítích</h2>
+          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a dění z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
 
-      <behold-widget feed-id="REPLACE_WITH_BEHOLD_FEED_ID"></behold-widget>
-
-      <div style="text-align:center; margin-top:clamp(28px,3.5vw,44px)">
-        <a href="https://www.instagram.com/ubuntu.planet" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; font-size:15px; font-weight:700; padding:14px 26px; border-radius:999px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; box-shadow:0 10px 22px -12px rgba(233,84,26,.9)" style-hover="filter:brightness(1.06)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          Otevřít Instagram
-        </a>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center">
+            <a href="https://www.instagram.com/festival.ubuntu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; font-size:15.5px; font-weight:700; padding:15px 28px; border-radius:999px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; box-shadow:0 10px 22px -12px rgba(233,84,26,.9)" style-hover="filter:brightness(1.06)">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              Instagram
+            </a>
+            <a href="https://www.facebook.com/events/2100285667591599?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22home%22%7D%2C%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%2C%22ref_notif_type%22%3Anull%7D" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; font-size:15.5px; font-weight:700; padding:15px 28px; border-radius:999px; background:#fff; color:#201e1d; border:1px solid rgba(32,30,29,.14)" style-hover="background:#faf7f2">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              Facebook
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
