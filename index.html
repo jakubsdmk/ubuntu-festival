@@ -23,7 +23,6 @@
 <meta name="twitter:description" content="Třídenní festival kousek od Prahy. 11.–13. září 2026, Řehenický dvorek.">
 <meta name="twitter:image" content="https://www.ubuntu-festival.cz/uploads/uvodka.png">
 <script src="./support.js"></script>
-<script src="https://w.behold.so/widget.js" type="module"></script>
 </head>
 <body>
 <x-dc>
@@ -325,8 +324,16 @@
           <h2 style="font-size:clamp(30px,3.4vw,50px); line-height:1.06; margin-bottom:16px; text-wrap:balance">Více informací na našich<br>sociálních sítích</h2>
           <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a dění z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
 
-          <div style="margin:0 auto clamp(28px,3.5vw,40px); max-width:1040px">
-            <behold-widget feed-id="K4Fq1B5OLcBd1iFQrRn5" style="--behold-image-aspect-ratio:4 / 5; --behold-gap:12px; --behold-border-radius:14px"></behold-widget>
+          <div style="position:relative; margin:0 auto clamp(28px,3.5vw,40px); max-width:1040px">
+            <button type="button" id="ig-prev" aria-label="Předchozí" style="position:absolute; left:-6px; top:50%; transform:translateY(-50%); z-index:3; width:44px; height:44px; border-radius:999px; border:1px solid rgba(32,30,29,.12); background:#fff; color:#201e1d; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px -10px rgba(32,30,29,.5)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <div id="ig-track" style="display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:4px; -ms-overflow-style:none; scrollbar-width:none">
+              <div style="flex:0 0 auto; width:clamp(200px,26vw,248px); aspect-ratio:4 / 5; border-radius:16px; background:rgba(32,30,29,.06); display:flex; align-items:center; justify-content:center; color:#8a857f; font-size:14px">Načítám…</div>
+            </div>
+            <button type="button" id="ig-next" aria-label="Další" style="position:absolute; right:-6px; top:50%; transform:translateY(-50%); z-index:3; width:44px; height:44px; border-radius:999px; border:1px solid rgba(32,30,29,.12); background:#fff; color:#201e1d; display:none; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px -10px rgba(32,30,29,.5)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
           </div>
 
           <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center">
@@ -618,6 +625,105 @@ class Component extends DCLogic {
   }
 }
 
+</script>
+<script>
+(function () {
+  var FEED = "https://feeds.behold.so/K4Fq1B5OLcBd1iFQrRn5";
+  var track = document.getElementById("ig-track");
+  var prev = document.getElementById("ig-prev");
+  var next = document.getElementById("ig-next");
+  if (!track) return;
+
+  function toPortrait(url) {
+    // Behold vrací čtvercový ořez (?class=squareLarge) – přepneme na nezoříznutý originál
+    return url ? url.replace(/\?class=square[A-Za-z]+/, "?class=originalLarge") : url;
+  }
+
+  function card(post) {
+    var large = post.sizes && post.sizes.large ? post.sizes.large.mediaUrl : post.mediaUrl;
+    var img = toPortrait(large) || post.mediaUrl;
+    var isVideo = post.mediaType === "VIDEO";
+    var a = document.createElement("a");
+    a.href = post.permalink || "https://www.instagram.com/ubuntu.planet";
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.setAttribute("aria-label", "Otevřít příspěvek na Instagramu");
+    a.style.cssText = "flex:0 0 auto; width:clamp(200px,26vw,248px); aspect-ratio:4 / 5; border-radius:16px; overflow:hidden; position:relative; scroll-snap-align:start; background:#e9e4dc; display:block; box-shadow:0 12px 28px -18px rgba(32,30,29,.55)";
+    a.innerHTML =
+      '<img src="' + img + '" alt="Příspěvek @ubuntu.planet na Instagramu" loading="lazy" crossorigin="anonymous" style="width:100%; height:100%; object-fit:cover; display:block">' +
+      '<span style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(32,30,29,0) 55%, rgba(32,30,29,.55) 100%)"></span>' +
+      '<span style="position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:999px; background:rgba(255,255,255,.9); display:flex; align-items:center; justify-content:center; color:#201e1d">' +
+        (isVideo
+          ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>') +
+      '</span>';
+    return a;
+  }
+
+  function updateArrows() {
+    var scrollable = track.scrollWidth - track.clientWidth > 8;
+    var d = scrollable ? "flex" : "none";
+    prev.style.display = d;
+    next.style.display = d;
+  }
+
+  function step() {
+    var first = track.querySelector("a");
+    return first ? first.getBoundingClientRect().width + 14 : 260;
+  }
+
+  prev.addEventListener("click", function () { track.scrollBy({ left: -step() * 2, behavior: "smooth" }); });
+  next.addEventListener("click", function () { track.scrollBy({ left: step() * 2, behavior: "smooth" }); });
+  window.addEventListener("resize", updateArrows);
+
+  function renderInto(el, posts) {
+    el.innerHTML = "";
+    posts.forEach(function (p) { el.appendChild(card(p)); });
+    updateArrows();
+  }
+
+  function renderError(el) {
+    el.innerHTML =
+      '<div style="flex:1; text-align:center; color:#8a857f; font-size:14.5px; padding:24px">Příspěvky se teď nepodařilo načíst — mrkni přímo na náš <a href="https://www.instagram.com/ubuntu.planet" target="_blank" rel="noopener" style="color:#e9541a; font-weight:700">Instagram</a>.</div>';
+  }
+
+  // Stránka běží přes framework x-dc, který šablonu vykresluje až po tomto skriptu
+  // a přepsal by vložené karty. Proto posty držíme v cache a vkládáme je opakovaně,
+  // dokud v živém DOM skutečně nezůstanou.
+  var cache = null;
+  var stable = 0;
+  var ticks = 0;
+
+  function sync() {
+    var el = document.getElementById("ig-track");
+    ticks++;
+    if (el && cache) {
+      if (el.querySelectorAll("a").length === cache.length) {
+        stable++;
+      } else {
+        renderInto(el, cache);
+        stable = 0;
+      }
+    }
+    if (stable >= 3 || ticks > 40) clearInterval(timer);
+  }
+
+  var timer = setInterval(sync, 150);
+
+  fetch(FEED)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var posts = (data && data.posts) || [];
+      if (!posts.length) throw new Error("no posts");
+      cache = posts;
+      sync();
+    })
+    .catch(function () {
+      clearInterval(timer);
+      var el = document.getElementById("ig-track");
+      if (el) renderError(el);
+    });
+})();
 </script>
 </body>
 </html>
