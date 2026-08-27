@@ -625,6 +625,7 @@ class Component extends DCLogic {
 <script>
 (function () {
   var FEED = "https://feeds.behold.so/K4Fq1B5OLcBd1iFQrRn5";
+  var MAX_POSTS = 12;
   var track = document.getElementById("ig-track");
   if (!track) return;
 
@@ -692,7 +693,7 @@ class Component extends DCLogic {
     .then(function (data) {
       var posts = (data && data.posts) || [];
       if (!posts.length) throw new Error("no posts");
-      cache = posts;
+      cache = posts.slice(0, MAX_POSTS);
       sync();
     })
     .catch(function () {
