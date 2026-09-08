@@ -347,7 +347,7 @@
             Zůstaň v obraze
           </p>
           <h2 style="font-size:clamp(30px,3.4vw,50px); line-height:1.06; margin-bottom:16px; text-wrap:balance">Více informací na našich<br>sociálních sítích</h2>
-          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a dění z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
+          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a děn�� z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
 
           <style>
             @media (max-width: 1000px) { #ig-track { grid-template-columns:repeat(3, 1fr) !important; } }
@@ -555,7 +555,7 @@
             FAQ
           </p>
           <h2 style="font-size:clamp(32px,3.4vw,48px); line-height:1.06; margin-bottom:18px">Časté otázky</h2>
-          <p style="font-size:16px; line-height:1.7; color:#4a4643; max-width:32ch">Nenašli jste odpověď? Napište na info@ubuntu-planet.com.</p>
+          <p style="font-size:16px; line-height:1.7; color:#4a4643; max-width:32ch">Nenašli jste odpově��? Napište na info@ubuntu-planet.com.</p>
         </div>
 
         <div data-r="two-s" style="display:grid; grid-template-columns:1fr 1fr; gap:14px">
@@ -886,6 +886,11 @@ class Component extends DCLogic {
 
   var state = { day: DAYS[0].date };
 
+  var EV_BY_ID = {};
+  DATA.forEach(function (e) { EV_BY_ID[e.id] = e; });
+  var VENUE_NAME = {};
+  VENUES.forEach(function (v) { VENUE_NAME[v.key] = v.name; });
+
   function tabsHTML() {
     var h = '<div data-tt-built="tabs" style="display:flex; flex-wrap:wrap; gap:10px">';
     DAYS.forEach(function (d) {
@@ -944,11 +949,13 @@ class Component extends DCLogic {
         var h = (sp.e - sp.s) * PXMIN;
         var st = TYPE_STYLE[e.type];
         var timeStr = fmt(sp.s) + "–" + (e.end ? fmt(sp.e) : "…");
-        col += '<div style="position:absolute; left:4px; right:4px; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box">'
+        var tip = timeStr + " · " + e.title + (e.speaker ? " · " + e.speaker : "");
+        col += '<button type="button" data-tt-ev="' + e.id + '" title="' + esc(tip) + '" style="display:block; text-align:left; cursor:pointer; position:absolute; left:4px; right:4px; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border:none; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box; font:inherit">'
           + '<div style="font-size:11px; font-weight:700; color:#8a5a2a; font-variant-numeric:tabular-nums; margin-bottom:2px">' + timeStr + '</div>'
           + '<div style="font-size:12.5px; font-weight:700; line-height:1.25; color:#201e1d">' + esc(e.title) + '</div>'
           + (e.speaker ? '<div style="font-size:11.5px; line-height:1.3; color:#6b6560; margin-top:2px">' + esc(e.speaker) + '</div>' : '')
-          + '</div>';
+          + '<span style="position:absolute; right:5px; bottom:4px; width:16px; height:16px; border-radius:999px; background:rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; color:' + st.bd + '"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span>'
+          + '</button>';
       });
       body += col + '</div>';
     });
@@ -976,11 +983,57 @@ class Component extends DCLogic {
     }
   }
 
+  function closeModal() {
+    var m = document.getElementById("tt-modal");
+    if (m) m.style.display = "none";
+    document.removeEventListener("keydown", onKey);
+  }
+  function onKey(ev) { if (ev.key === "Escape") closeModal(); }
+
+  function openModal(e) {
+    var day = DAYS.filter(function (d) { return d.date === e.date; })[0];
+    var sp = span(e, timeToMin(day.start));
+    var timeStr = fmt(sp.s) + "–" + (e.end ? fmt(sp.e) : "otevřený konec");
+    var st = TYPE_STYLE[e.type];
+
+    var m = document.getElementById("tt-modal");
+    if (!m) {
+      m = document.createElement("div");
+      m.id = "tt-modal";
+      m.style.cssText = "position:fixed; inset:0; z-index:100; display:none; align-items:flex-end; justify-content:center; padding:0; background:rgba(32,30,29,.5)";
+      document.body.appendChild(m);
+      m.addEventListener("click", function (ev) {
+        if (ev.target === m || (ev.target.closest && ev.target.closest("[data-tt-close]"))) closeModal();
+      });
+    }
+    m.innerHTML =
+      '<div role="dialog" aria-modal="true" style="width:100%; max-width:520px; background:#fff; border-radius:22px 22px 0 0; padding:24px 22px calc(24px + env(safe-area-inset-bottom)); box-shadow:0 -20px 60px -30px rgba(32,30,29,.6)">'
+      + '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:14px">'
+      +   '<span style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8a5a2a; background:' + st.bg + '; border-left:3px solid ' + st.bd + '; padding:6px 12px; border-radius:8px">' + TYPE_LABEL[e.type] + '</span>'
+      +   '<button type="button" data-tt-close style="flex:0 0 auto; cursor:pointer; width:36px; height:36px; border-radius:999px; border:1px solid rgba(32,30,29,.12); background:#faf7f2; color:#201e1d; display:flex; align-items:center; justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>'
+      + '</div>'
+      + '<h3 style="font-size:22px; line-height:1.2; margin-bottom:12px; color:#201e1d">' + esc(e.title) + '</h3>'
+      + (e.speaker ? '<p style="display:flex; gap:9px; align-items:flex-start; font-size:15.5px; line-height:1.5; color:#4a4643; margin-bottom:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a2521f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; margin-top:1px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>' + esc(e.speaker) + '</span></p>' : '')
+      + '<p style="display:flex; gap:9px; align-items:center; font-size:15.5px; color:#4a4643; margin-bottom:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a2521f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span style="font-variant-numeric:tabular-nums">' + timeStr + '</span></p>'
+      + '<p style="display:flex; gap:9px; align-items:center; font-size:15.5px; color:#4a4643"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a2521f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>' + esc(VENUE_NAME[e.venue] || "") + ' · ' + esc(day.label) + ' ' + day.num + '</span></p>'
+      + '</div>';
+    m.style.display = "flex";
+    document.addEventListener("keydown", onKey);
+  }
+
   document.addEventListener("click", function (ev) {
-    var btn = ev.target && ev.target.closest ? ev.target.closest("[data-tt-day]") : null;
-    if (!btn) return;
-    var d = btn.getAttribute("data-tt-day");
-    if (d && d !== state.day) { state.day = d; apply(); }
+    if (!ev.target || !ev.target.closest) return;
+    var dayBtn = ev.target.closest("[data-tt-day]");
+    if (dayBtn) {
+      var d = dayBtn.getAttribute("data-tt-day");
+      if (d && d !== state.day) { state.day = d; apply(); }
+      return;
+    }
+    var evBtn = ev.target.closest("[data-tt-ev]");
+    if (evBtn) {
+      var e = EV_BY_ID[evBtn.getAttribute("data-tt-ev")];
+      if (e) openModal(e);
+    }
   });
 
   apply();
