@@ -273,7 +273,7 @@
             Program
           </p>
           <h2 style="font-size:clamp(34px,3.6vw,54px); line-height:1.05; margin-bottom:20px">Tři dny,<br>jeden rytmus</h2>
-          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:36ch">Žádné přebíhání mezi deseti pódii. Oficiální program najdeš na Instagramu.</p>
+          <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:36ch">Pět scén, tři dny a jeden společný rytmus. Níže si projdeš kompletní timetable — stačí přepínat mezi dny.</p>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:14px">
@@ -308,11 +308,31 @@
             </span>
             <div style="flex:1; min-width:0">
               <h3 style="font-size:21px; margin-bottom:5px">Neděle 13. 9.</h3>
-              <p style="font-size:15px; color:#6b6560">Program od 10:00</p>
+              <p style="font-size:15px; color:#6b6560">Program od 9:00</p>
             </div>
             <span style="font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#5c6b45; background:#eef3e3; padding:7px 13px; border-radius:999px; white-space:nowrap">Doznívání</span>
           </div>
         </div>
+      </div>
+
+      <div id="timetable" style="margin-top:clamp(40px,5vw,72px)">
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:22px">
+          <div>
+            <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:10px">
+              <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
+              Timetable
+            </p>
+            <h3 style="font-size:clamp(24px,2.6vw,34px); line-height:1.1">Kompletní program všech tří dnů</h3>
+          </div>
+          <div id="tt-legend"></div>
+        </div>
+        <div id="tt-tabs" style="margin-bottom:18px"></div>
+        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid rgba(32,30,29,.1); border-radius:20px; background:#fff">
+          <div id="tt-root" style="min-width:940px">
+            <div style="padding:48px; text-align:center; color:#8a857f">Načítám program…</div>
+          </div>
+        </div>
+        <p style="font-size:13px; color:#8a857f; margin-top:12px">Na mobilu tabulku posuneš doprava. Výška políček odpovídá délce programu; změny vyhrazeny.</p>
       </div>
     </div>
   </section>
@@ -753,6 +773,219 @@ class Component extends DCLogic {
       var el = document.getElementById("ig-track");
       if (el) renderError(el);
     });
+})();
+</script>
+<script>
+(function () {
+  var PXMIN = 1.7;   // pixelů na minutu (výška = délka eventu)
+  var SLOT = 30;     // rastr časové osy po 30 min
+  var OPEN_MIN = 90; // náhradní délka pro eventy bez konce
+
+  var VENUES = [
+    { key: "beduinsky-stan", name: "Beduínský stan" },
+    { key: "kralovska-jurta", name: "Královská jurta" },
+    { key: "ohniste", name: "Ohniště" },
+    { key: "jurta-samanka", name: "Jurta Šamanka" },
+    { key: "venkovni-hriste", name: "Venkovní hřiště" }
+  ];
+
+  var DAYS = [
+    { date: "2026-09-11", label: "Pátek", num: "11. 9.", start: "14:00" },
+    { date: "2026-09-12", label: "Sobota", num: "12. 9.", start: "08:00" },
+    { date: "2026-09-13", label: "Neděle", num: "13. 9.", start: "08:00" }
+  ];
+
+  var TYPE_LABEL = { concert: "Koncert", workshop: "Workshop", lecture: "Přednáška", other: "Ostatní" };
+  var TYPE_STYLE = {
+    concert:  { bg: "#fff3e6", bd: "#e19256" },
+    workshop: { bg: "#eef3e3", bd: "#8a9a5b" },
+    lecture:  { bg: "#f4ede3", bd: "#c99a63" },
+    other:    { bg: "#f4f1ec", bd: "#b0a89a" }
+  };
+
+  var DATA = [
+    // Pátek 11. 9. — Ohniště
+    { id: "fr-oh-1", date: "2026-09-11", venue: "ohniste", start: "14:00", end: "14:45", title: "Společné zahájení festivalu", type: "other" },
+    { id: "fr-oh-2", date: "2026-09-11", venue: "ohniste", start: "15:00", end: "15:45", title: "Cacao Ceremony", speaker: "Richard Bohačík", type: "other" },
+    { id: "fr-oh-3", date: "2026-09-11", venue: "ohniste", start: "22:30", title: "Jam u ohně", type: "other" },
+    // Pátek — Beduínský stan
+    { id: "fr-be-1", date: "2026-09-11", venue: "beduinsky-stan", start: "16:00", end: "16:45", title: "Cesty k poznání a vnitřnímu klidu", speaker: "Itarenamu – Jana & Radek Pilmaierovi", type: "concert" },
+    { id: "fr-be-2", date: "2026-09-11", venue: "beduinsky-stan", start: "17:00", end: "17:20", title: "Stand Up Magic Show přítomného okamžiku", speaker: "Antony Brtnik", type: "other" },
+    { id: "fr-be-3", date: "2026-09-11", venue: "beduinsky-stan", start: "17:30", end: "18:45", title: "Social Steps – Soul, Funk & R&B", speaker: "Anet HBO", type: "concert" },
+    { id: "fr-be-4", date: "2026-09-11", venue: "beduinsky-stan", start: "20:00", end: "20:45", title: "Tvorba jako terapie i modlitba", speaker: "Jula Inka", type: "lecture" },
+    { id: "fr-be-5", date: "2026-09-11", venue: "beduinsky-stan", start: "21:00", end: "22:30", title: "Ecstatic dance", speaker: "Marko Ubuntu (Marek Šilpoch)", type: "other" },
+    // Pátek — Královská jurta
+    { id: "fr-kj-1", date: "2026-09-11", venue: "kralovska-jurta", start: "17:15", end: "18:00", title: "Vrátit se domů", speaker: "Kiara Laud", type: "lecture" },
+    { id: "fr-kj-2", date: "2026-09-11", venue: "kralovska-jurta", start: "18:15", end: "19:00", title: "Udělej si z nevýhody výhodu", speaker: "Adam Vopička & Pan Lynx", type: "lecture" },
+    { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
+    // Pátek — Venkovní hřiště
+    { id: "fr-vh-1", date: "2026-09-11", venue: "venkovni-hriste", start: "17:20", end: "19:00", title: "Chladová terapie", speaker: "Libor Mattuš", type: "workshop" },
+
+    // Sobota 12. 9. — Ohniště
+    { id: "sa-oh-1", date: "2026-09-12", venue: "ohniste", start: "08:30", end: "10:00", title: "Tichá snídaně u ohně", type: "other" },
+    { id: "sa-oh-2", date: "2026-09-12", venue: "ohniste", start: "13:30", end: "15:00", title: "Zpívání v kruhu", speaker: "Phoenix Maria", type: "concert" },
+    { id: "sa-oh-3", date: "2026-09-12", venue: "ohniste", start: "22:30", end: "23:15", title: "Příběhy, které patří k ohni", speaker: "Mikuláš Kopecký · Marcus Merlin & friends", type: "other" },
+    { id: "sa-oh-4", date: "2026-09-12", venue: "ohniste", start: "23:15", title: "Jam u ohně", type: "other" },
+    // Sobota — Beduínský stan
+    { id: "sa-be-1", date: "2026-09-12", venue: "beduinsky-stan", start: "08:30", end: "09:15", title: "Jógové probuzení s Maar", type: "workshop" },
+    { id: "sa-be-2", date: "2026-09-12", venue: "beduinsky-stan", start: "10:00", end: "10:45", title: "Na první pohled neslučitelné směry", speaker: "Toman Equilibre", type: "lecture" },
+    { id: "sa-be-3", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Nastavení mysli: Od přežití ke smyslu", speaker: "Kryštof Jarmar", type: "lecture" },
+    { id: "sa-be-4", date: "2026-09-12", venue: "beduinsky-stan", start: "12:00", end: "12:45", title: "Poselství naděje a světla", speaker: "Marie Němcová", type: "concert" },
+    { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "13:00", end: "13:45", title: "Když úspěch nestačí (beseda)", speaker: "Elena Janota · Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
+    { id: "sa-be-6", date: "2026-09-12", venue: "beduinsky-stan", start: "14:00", end: "14:45", title: "Playful Games for Connection with MAAR", type: "workshop" },
+    { id: "sa-be-7", date: "2026-09-12", venue: "beduinsky-stan", start: "15:00", end: "15:35", title: "ENSOUL", speaker: "Petr Vaněk & Sára Bukovská", type: "concert" },
+    { id: "sa-be-8", date: "2026-09-12", venue: "beduinsky-stan", start: "15:35", end: "16:30", title: "Vztah jako zahrada", speaker: "Petr Vaněk & Petra Vaněk Svarinská", type: "lecture" },
+    { id: "sa-be-9", date: "2026-09-12", venue: "beduinsky-stan", start: "17:00", end: "17:45", title: "Do jemnosti, zranitelnosti a opravdovosti", speaker: "Lunaries", type: "concert" },
+    { id: "sa-be-10", date: "2026-09-12", venue: "beduinsky-stan", start: "18:00", end: "18:45", title: "Bližší je mi lidskost než dokonalost", speaker: "Michal Juřička", type: "lecture" },
+    { id: "sa-be-11", date: "2026-09-12", venue: "beduinsky-stan", start: "19:00", end: "19:45", title: "UBUNTU – Nacházet to, co Nás spojuje", speaker: "Šimon Bilina, Šárka Bilinová, Adam Vopička, Sarah Salloum, Karu & Ctirad Macháně", type: "other" },
+    { id: "sa-be-12", date: "2026-09-12", venue: "beduinsky-stan", start: "20:00", end: "20:30", title: "Fireshow", type: "other" },
+    { id: "sa-be-13", date: "2026-09-12", venue: "beduinsky-stan", start: "20:45", end: "22:15", title: "Ecstatic Dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
+    // Sobota — Královská jurta
+    { id: "sa-kj-1", date: "2026-09-12", venue: "kralovska-jurta", start: "09:00", end: "09:45", title: "Hudba v kontextu dvou odlišných kultur / Hlasový workshop", speaker: "Sarah Salloum", type: "workshop" },
+    { id: "sa-kj-2", date: "2026-09-12", venue: "kralovska-jurta", start: "10:00", end: "10:45", title: "Autorský koncert – Karu", type: "concert" },
+    { id: "sa-kj-3", date: "2026-09-12", venue: "kralovska-jurta", start: "11:30", end: "12:30", title: "Sound healing a cacao ceremony s Kateřinou Rae", type: "workshop" },
+    { id: "sa-kj-4", date: "2026-09-12", venue: "kralovska-jurta", start: "14:00", end: "14:45", title: "Co nás porod může naučit o životě", speaker: "Adéla Urbánková", type: "lecture" },
+    { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "17:00", end: "17:45", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
+    { id: "sa-kj-6", date: "2026-09-12", venue: "kralovska-jurta", start: "18:00", end: "18:45", title: "Půstem k sebelásce", speaker: "Tereza & Zuzana", type: "lecture" },
+    // Sobota — Jurta Šamanka
+    { id: "sa-js-1", date: "2026-09-12", venue: "jurta-samanka", start: "09:00", end: "09:45", title: "Můžeme mnohem víc, než si sami dovolíme věřit", speaker: "Ivana Melichová", type: "lecture" },
+    { id: "sa-js-2", date: "2026-09-12", venue: "jurta-samanka", start: "10:00", end: "10:45", title: "Nemoc nezačíná jen na talíři", speaker: "Lucie Kořínková", type: "lecture" },
+    { id: "sa-js-3", date: "2026-09-12", venue: "jurta-samanka", start: "17:00", end: "17:45", title: "Nový pohled na výuku hudby pro děti", speaker: "Sára Bukovská", type: "lecture" },
+    // Sobota — Venkovní hřiště
+    { id: "sa-vh-1", date: "2026-09-12", venue: "venkovni-hriste", start: "11:30", end: "12:30", title: "Pohyb v rytmu dechu", speaker: "Zuzana UnaRTé Zvolánková", type: "workshop" },
+
+    // Neděle 13. 9. — Venkovní hřiště
+    { id: "ne-vh-1", date: "2026-09-13", venue: "venkovni-hriste", start: "09:00", end: "10:00", title: "Jóga + hudební meditace", speaker: "Zuzana UnaRTé Zvolánková", type: "workshop" },
+    // Neděle — Beduínský stan
+    { id: "ne-be-1", date: "2026-09-13", venue: "beduinsky-stan", start: "10:15", end: "12:15", title: "Kurz první pomoci", speaker: "Jan Čáha", type: "workshop" },
+    { id: "ne-be-2", date: "2026-09-13", venue: "beduinsky-stan", start: "13:45", end: "14:45", title: "Koncert", speaker: "Zuna", type: "concert" },
+    { id: "ne-be-3", date: "2026-09-13", venue: "beduinsky-stan", start: "15:00", end: "16:00", title: "Koncert", speaker: "Daniel Sýkora", type: "concert" },
+    { id: "ne-be-4", date: "2026-09-13", venue: "beduinsky-stan", start: "16:15", end: "18:00", title: "Open mic naruby", speaker: "Adam Trnka", type: "other" },
+    { id: "ne-be-5", date: "2026-09-13", venue: "beduinsky-stan", start: "18:15", end: "19:15", title: "Kdyby srdce mluvilo", speaker: "Marty a Daniel", type: "concert" },
+    { id: "ne-be-6", date: "2026-09-13", venue: "beduinsky-stan", start: "19:30", end: "22:00", title: "Ecstatic dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
+    // Neděle — Jurta Šamanka
+    { id: "ne-js-1", date: "2026-09-13", venue: "jurta-samanka", start: "12:30", end: "13:30", title: "Z korporátu do džungle a zase zpátky", speaker: "Forest Ink", type: "lecture" }
+  ];
+
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function timeToMin(t) { var p = t.split(":"); return (+p[0]) * 60 + (+p[1]); }
+  function fmt(min) {
+    min = ((min % 1440) + 1440) % 1440;
+    var h = Math.floor(min / 60), m = min % 60;
+    return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m);
+  }
+  // Vrátí start/end v minutách od 0:00, s ošetřením přechodu přes půlnoc.
+  function span(ev, dayStart) {
+    var s = timeToMin(ev.start);
+    var e = ev.end ? timeToMin(ev.end) : null;
+    if (e !== null && e < s) e += 1440;                 // event přesahuje půlnoc
+    if (s < dayStart) { s += 1440; if (e !== null) e += 1440; } // začátek po půlnoci = stále tentýž den
+    if (e === null) e = s + OPEN_MIN;
+    return { s: s, e: Math.max(e, s + 15) };
+  }
+
+  var state = { day: DAYS[0].date };
+
+  function tabsHTML() {
+    var h = '<div data-tt-built="tabs" style="display:flex; flex-wrap:wrap; gap:10px">';
+    DAYS.forEach(function (d) {
+      var on = d.date === state.day;
+      h += '<button type="button" data-tt-day="' + d.date + '" style="cursor:pointer; border-radius:999px; padding:11px 20px; font-size:15px; font-weight:700; '
+        + 'border:1px solid ' + (on ? 'transparent' : 'rgba(32,30,29,.14)') + '; '
+        + (on ? 'background:linear-gradient(96deg,#ff6a22,#f0932b); color:#fff;' : 'background:#fff; color:#4a4643;')
+        + '">' + d.label + ' <span style="font-weight:600; opacity:.75">' + d.num + '</span></button>';
+    });
+    return h + '</div>';
+  }
+
+  function legendHTML() {
+    var order = ["concert", "workshop", "lecture", "other"];
+    var h = '<div data-tt-built="legend" style="display:flex; flex-wrap:wrap; gap:12px 16px; align-items:center">';
+    order.forEach(function (t) {
+      var st = TYPE_STYLE[t];
+      h += '<span style="display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:#6b6560">'
+        + '<span style="width:14px; height:14px; border-radius:4px; background:' + st.bg + '; border-left:3px solid ' + st.bd + '"></span>'
+        + TYPE_LABEL[t] + '</span>';
+    });
+    return h + '</div>';
+  }
+
+  function gridHTML() {
+    var day = DAYS.filter(function (d) { return d.date === state.day; })[0];
+    var evs = DATA.filter(function (e) { return e.date === day.date; });
+    var dayStart = timeToMin(day.start);
+    var maxEnd = dayStart + 60;
+    evs.forEach(function (e) { var sp = span(e, dayStart); if (sp.e > maxEnd) maxEnd = sp.e; });
+    var dayEnd = Math.ceil(maxEnd / SLOT) * SLOT;
+    var total = (dayEnd - dayStart) * PXMIN;
+    var cols = "64px repeat(5, minmax(150px, 1fr))";
+    var gl = "repeating-linear-gradient(to bottom, rgba(32,30,29,.07) 0, rgba(32,30,29,.07) 1px, transparent 1px, transparent " + (SLOT * PXMIN) + "px)";
+
+    var head = '<div style="display:grid; grid-template-columns:' + cols + '; position:sticky; top:0; z-index:6; background:#faf7f2; border-bottom:1px solid rgba(32,30,29,.12)">';
+    head += '<div style="padding:12px 8px; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#8a857f">Čas</div>';
+    VENUES.forEach(function (v) {
+      head += '<div style="padding:12px 12px; font-size:13.5px; font-weight:800; color:#201e1d; border-left:1px solid rgba(32,30,29,.08)">' + v.name + '</div>';
+    });
+    head += '</div>';
+
+    var body = '<div style="display:grid; grid-template-columns:' + cols + '">';
+    var timeCol = '<div style="position:relative; height:' + total + 'px; background-image:' + gl + '">';
+    for (var m = dayStart; m <= dayEnd; m += SLOT) {
+      timeCol += '<div style="position:absolute; top:' + ((m - dayStart) * PXMIN - 8) + 'px; left:0; right:6px; text-align:right; font-size:11.5px; color:#a09a92; font-variant-numeric:tabular-nums">' + fmt(m) + '</div>';
+    }
+    timeCol += '</div>';
+    body += timeCol;
+
+    VENUES.forEach(function (v) {
+      var col = '<div style="position:relative; height:' + total + 'px; border-left:1px solid rgba(32,30,29,.08); background-image:' + gl + '">';
+      evs.filter(function (e) { return e.venue === v.key; }).forEach(function (e) {
+        var sp = span(e, dayStart);
+        var top = (sp.s - dayStart) * PXMIN;
+        var h = (sp.e - sp.s) * PXMIN;
+        var st = TYPE_STYLE[e.type];
+        var timeStr = fmt(sp.s) + "–" + (e.end ? fmt(sp.e) : "…");
+        col += '<div style="position:absolute; left:4px; right:4px; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box">'
+          + '<div style="font-size:11px; font-weight:700; color:#8a5a2a; font-variant-numeric:tabular-nums; margin-bottom:2px">' + timeStr + '</div>'
+          + '<div style="font-size:12.5px; font-weight:700; line-height:1.25; color:#201e1d">' + esc(e.title) + '</div>'
+          + (e.speaker ? '<div style="font-size:11.5px; line-height:1.3; color:#6b6560; margin-top:2px">' + esc(e.speaker) + '</div>' : '')
+          + '</div>';
+      });
+      body += col + '</div>';
+    });
+    body += '</div>';
+
+    return '<div data-tt-built="grid">' + head + body + '</div>';
+  }
+
+  function apply() {
+    var t = document.getElementById("tt-tabs");
+    var l = document.getElementById("tt-legend");
+    var r = document.getElementById("tt-root");
+    if (t) t.innerHTML = tabsHTML();
+    if (l) l.innerHTML = legendHTML();
+    if (r) r.innerHTML = gridHTML();
+  }
+
+  // Stránka běží přes framework x-dc, který po tomto skriptu překreslí šablonu
+  // a smazal by vložený obsah. Proto po dobu ustálení znovu vykreslíme, když zmizí.
+  function guard() {
+    if (!document.querySelector('#tt-root [data-tt-built="grid"]')
+      || !document.querySelector('#tt-tabs [data-tt-built="tabs"]')
+      || !document.querySelector('#tt-legend [data-tt-built="legend"]')) {
+      apply();
+    }
+  }
+
+  document.addEventListener("click", function (ev) {
+    var btn = ev.target && ev.target.closest ? ev.target.closest("[data-tt-day]") : null;
+    if (!btn) return;
+    var d = btn.getAttribute("data-tt-day");
+    if (d && d !== state.day) { state.day = d; apply(); }
+  });
+
+  apply();
+  var g = setInterval(guard, 300);
+  setTimeout(function () { clearInterval(g); }, 15000);
 })();
 </script>
 </body>
