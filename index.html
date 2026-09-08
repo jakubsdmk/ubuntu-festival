@@ -332,6 +332,7 @@
           <div id="tt-legend"></div>
         </div>
         <div id="tt-tabs" style="margin-bottom:18px"></div>
+        <div id="tt-note"></div>
         <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid rgba(32,30,29,.1); border-radius:20px; background:#fff">
           <div id="tt-root" style="min-width:940px">
             <div style="padding:48px; text-align:center; color:#8a857f">Načítám program…</div>
@@ -349,7 +350,7 @@
         <div style="position:relative">
           <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
             <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
-            Zůstaň v obraze
+            Z��staň v obraze
           </p>
           <h2 style="font-size:clamp(30px,3.4vw,50px); line-height:1.06; margin-bottom:16px; text-wrap:balance">Více informací na našich<br>sociálních sítích</h2>
           <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a dění z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
@@ -800,6 +801,13 @@ class Component extends DCLogic {
     { date: "2026-09-13", label: "Neděle", num: "13. 9.", start: "08:00" }
   ];
 
+  // Poznámky k danému dni (např. eventy bez pevného času, které nelze umístit na osu).
+  var NOTES = {
+    "2026-09-12": [
+      "Fireshow (Beduínský stan) – přesný čas bude upřesněn pořadatelem, zakreslena u večerního bloku UBUNTU."
+    ]
+  };
+
   var TYPE_LABEL = { concert: "Koncert", workshop: "Workshop", lecture: "Přednáška", other: "Ostatní" };
   var TYPE_STYLE = {
     concert:  { bg: "#fff3e6", bd: "#e19256" },
@@ -822,7 +830,9 @@ class Component extends DCLogic {
     // Pátek — Královská jurta
     { id: "fr-kj-1", date: "2026-09-11", venue: "kralovska-jurta", start: "17:15", end: "18:00", title: "Vrátit se domů", speaker: "Kiara Laud", type: "lecture" },
     { id: "fr-kj-2", date: "2026-09-11", venue: "kralovska-jurta", start: "18:15", end: "19:00", title: "Udělej si z nevýhody výhodu", speaker: "Adam Vopička & Pan Lynx", type: "lecture" },
-    { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
+    { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Návrat k přirozenosti", speaker: "Ctirad Macháně & Vládnemír", type: "lecture" },
+    // Pátek — Jurta Šamanka
+    { id: "fr-js-1", date: "2026-09-11", venue: "jurta-samanka", start: "19:15", end: "20:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
     // Pátek — Venkovní hřiště
     { id: "fr-vh-1", date: "2026-09-11", venue: "venkovni-hriste", start: "17:20", end: "19:00", title: "Chladová terapie", speaker: "Libor Mattuš", type: "workshop" },
 
@@ -835,7 +845,7 @@ class Component extends DCLogic {
     { id: "sa-be-1", date: "2026-09-12", venue: "beduinsky-stan", start: "08:30", end: "09:15", title: "Jógové probuzení s Maar", type: "workshop" },
     { id: "sa-be-2", date: "2026-09-12", venue: "beduinsky-stan", start: "10:00", end: "10:45", title: "Na první pohled neslučitelné směry", speaker: "Toman Equilibre", type: "lecture" },
     { id: "sa-be-3", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Nastavení mysli: Od přežití ke smyslu", speaker: "Kryštof Jarmar", type: "lecture" },
-    { id: "sa-be-4", date: "2026-09-12", venue: "beduinsky-stan", start: "12:00", end: "12:45", title: "Poselství naděje a světla", speaker: "Marie Němcová", type: "concert" },
+    { id: "sa-be-4", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Poselství naděje a světla", speaker: "Marie Němcová", type: "concert" },
     { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "13:00", end: "13:45", title: "Když úspěch nestačí (beseda)", speaker: "Elena Janota · Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
     { id: "sa-be-6", date: "2026-09-12", venue: "beduinsky-stan", start: "14:00", end: "14:45", title: "Playful Games for Connection with MAAR", type: "workshop" },
     { id: "sa-be-7", date: "2026-09-12", venue: "beduinsky-stan", start: "15:00", end: "15:35", title: "ENSOUL", speaker: "Petr Vaněk & Sára Bukovská", type: "concert" },
@@ -843,14 +853,13 @@ class Component extends DCLogic {
     { id: "sa-be-9", date: "2026-09-12", venue: "beduinsky-stan", start: "17:00", end: "17:45", title: "Do jemnosti, zranitelnosti a opravdovosti", speaker: "Lunaries", type: "concert" },
     { id: "sa-be-10", date: "2026-09-12", venue: "beduinsky-stan", start: "18:00", end: "18:45", title: "Bližší je mi lidskost než dokonalost", speaker: "Michal Juřička", type: "lecture" },
     { id: "sa-be-11", date: "2026-09-12", venue: "beduinsky-stan", start: "19:00", end: "19:45", title: "UBUNTU – Nacházet to, co Nás spojuje", speaker: "Šimon Bilina, Šárka Bilinová, Adam Vopička, Sarah Salloum, Karu & Ctirad Macháně", type: "other" },
-    { id: "sa-be-12", date: "2026-09-12", venue: "beduinsky-stan", start: "20:00", end: "20:30", title: "Fireshow", type: "other" },
     { id: "sa-be-13", date: "2026-09-12", venue: "beduinsky-stan", start: "20:45", end: "22:15", title: "Ecstatic Dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
     // Sobota — Královská jurta
     { id: "sa-kj-1", date: "2026-09-12", venue: "kralovska-jurta", start: "09:00", end: "09:45", title: "Hudba v kontextu dvou odlišných kultur / Hlasový workshop", speaker: "Sarah Salloum", type: "workshop" },
     { id: "sa-kj-2", date: "2026-09-12", venue: "kralovska-jurta", start: "10:00", end: "10:45", title: "Autorský koncert – Karu", type: "concert" },
     { id: "sa-kj-3", date: "2026-09-12", venue: "kralovska-jurta", start: "11:30", end: "12:30", title: "Sound healing a cacao ceremony s Kateřinou Rae", type: "workshop" },
     { id: "sa-kj-4", date: "2026-09-12", venue: "kralovska-jurta", start: "14:00", end: "14:45", title: "Co nás porod může naučit o životě", speaker: "Adéla Urbánková", type: "lecture" },
-    { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "17:00", end: "17:45", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
+    { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "16:30", end: "17:15", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
     { id: "sa-kj-6", date: "2026-09-12", venue: "kralovska-jurta", start: "18:00", end: "18:45", title: "Půstem k sebelásce", speaker: "Tereza & Zuzana", type: "lecture" },
     // Sobota — Jurta Šamanka
     { id: "sa-js-1", date: "2026-09-12", venue: "jurta-samanka", start: "09:00", end: "09:45", title: "Můžeme mnohem víc, než si sami dovolíme věřit", speaker: "Ivana Melichová", type: "lecture" },
@@ -948,14 +957,47 @@ class Component extends DCLogic {
 
     VENUES.forEach(function (v) {
       var col = '<div style="position:relative; height:' + total + 'px; border-left:1px solid rgba(32,30,29,.08); background-image:' + gl + '">';
-      evs.filter(function (e) { return e.venue === v.key; }).forEach(function (e) {
+
+      // Připrav eventy lokace se spočítaným rozsahem, seřazené podle začátku.
+      var items = evs.filter(function (e) { return e.venue === v.key; }).map(function (e) {
         var sp = span(e, dayStart);
-        var top = (sp.s - dayStart) * PXMIN;
-        var h = (sp.e - sp.s) * PXMIN;
+        return { e: e, s: sp.s, en: sp.e };
+      }).sort(function (a, b) { return a.s - b.s || a.en - b.en; });
+
+      // Přiřaď dráhy: překrývající se eventy jdou vedle sebe, ne přes sebe.
+      var laneEnds = [];
+      items.forEach(function (it) {
+        var placed = false;
+        for (var i = 0; i < laneEnds.length; i++) {
+          if (it.s >= laneEnds[i]) { it.lane = i; laneEnds[i] = it.en; placed = true; break; }
+        }
+        if (!placed) { it.lane = laneEnds.length; laneEnds.push(it.en); }
+      });
+
+      // Shluky vzájemně se překrývajících eventů určí, na kolik sloupců dělit šířku.
+      var cur = null;
+      items.forEach(function (it) {
+        if (cur && it.s < cur.end) { cur.items.push(it); cur.end = Math.max(cur.end, it.en); }
+        else { cur = { items: [it], end: it.en }; }
+        it.cluster = cur;
+      });
+      items.forEach(function (it) {
+        var cols2 = 1;
+        it.cluster.items.forEach(function (o) { if (o.lane + 1 > cols2) cols2 = o.lane + 1; });
+        it.cols = cols2;
+      });
+
+      items.forEach(function (it) {
+        var e = it.e;
+        var top = (it.s - dayStart) * PXMIN;
+        var h = (it.en - it.s) * PXMIN;
         var st = TYPE_STYLE[e.type];
-        var timeStr = fmt(sp.s) + "–" + (e.end ? fmt(sp.e) : "…");
+        var timeStr = fmt(it.s) + "–" + (e.end ? fmt(it.en) : "…");
         var tip = timeStr + " · " + e.title + (e.speaker ? " · " + e.speaker : "");
-        col += '<button type="button" data-tt-ev="' + e.id + '" title="' + esc(tip) + '" style="display:block; text-align:left; cursor:pointer; position:absolute; left:4px; right:4px; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border:none; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box; font:inherit">'
+        var wPct = 100 / it.cols;
+        var leftCalc = "calc(" + (wPct * it.lane) + "% + 4px)";
+        var widthCalc = "calc(" + wPct + "% - " + (it.cols > 1 ? 6 : 8) + "px)";
+        col += '<button type="button" data-tt-ev="' + e.id + '" title="' + esc(tip) + '" style="display:block; text-align:left; cursor:pointer; position:absolute; left:' + leftCalc + '; width:' + widthCalc + '; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border:none; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box; font:inherit">'
           + '<div style="font-size:11px; font-weight:700; color:#8a5a2a; font-variant-numeric:tabular-nums; margin-bottom:2px">' + timeStr + '</div>'
           + '<div style="font-size:12.5px; font-weight:700; line-height:1.25; color:#201e1d">' + esc(e.title) + '</div>'
           + (e.speaker ? '<div style="font-size:11.5px; line-height:1.3; color:#6b6560; margin-top:2px">' + esc(e.speaker) + '</div>' : '')
@@ -969,12 +1011,26 @@ class Component extends DCLogic {
     return '<div data-tt-built="grid">' + head + body + '</div>';
   }
 
+  function noteHTML() {
+    var notes = NOTES[state.day];
+    if (!notes || !notes.length) return '<div data-tt-built="note"></div>';
+    var h = '<div data-tt-built="note" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">';
+    notes.forEach(function (n) {
+      h += '<p style="display:flex; gap:9px; align-items:flex-start; font-size:13.5px; line-height:1.5; color:#8a5a2a; background:#f4f1ec; border-left:3px solid #b0a89a; border-radius:8px; padding:10px 12px; margin:0">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto; margin-top:1px"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+        + '<span>' + esc(n) + '</span></p>';
+    });
+    return h + '</div>';
+  }
+
   function apply() {
     var t = document.getElementById("tt-tabs");
     var l = document.getElementById("tt-legend");
+    var n = document.getElementById("tt-note");
     var r = document.getElementById("tt-root");
     if (t) t.innerHTML = tabsHTML();
     if (l) l.innerHTML = legendHTML();
+    if (n) n.innerHTML = noteHTML();
     if (r) r.innerHTML = gridHTML();
   }
 
@@ -983,7 +1039,8 @@ class Component extends DCLogic {
   function guard() {
     if (!document.querySelector('#tt-root [data-tt-built="grid"]')
       || !document.querySelector('#tt-tabs [data-tt-built="tabs"]')
-      || !document.querySelector('#tt-legend [data-tt-built="legend"]')) {
+      || !document.querySelector('#tt-legend [data-tt-built="legend"]')
+      || !document.querySelector('#tt-note [data-tt-built="note"]')) {
       apply();
     }
   }
