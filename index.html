@@ -916,13 +916,14 @@ class Component extends DCLogic {
   VENUES.forEach(function (v) { VENUE_NAME[v.key] = v.name; });
 
   function tabsHTML() {
-    var h = '<div data-tt-built="tabs" style="display:flex; flex-wrap:wrap; gap:10px">';
+    var h = '<div data-tt-built="tabs" role="tablist" aria-label="Dny festivalu" style="display:flex; flex-wrap:wrap; gap:2px; border-bottom:1px solid rgba(32,30,29,.14)">';
     DAYS.forEach(function (d) {
       var on = d.date === state.day;
-      h += '<button type="button" data-tt-day="' + d.date + '" style="cursor:pointer; border-radius:999px; padding:11px 20px; font-size:15px; font-weight:700; '
-        + 'border:1px solid ' + (on ? 'transparent' : 'rgba(32,30,29,.14)') + '; '
-        + (on ? 'background:linear-gradient(96deg,#ff6a22,#f0932b); color:#fff;' : 'background:#fff; color:#4a4643;')
-        + '">' + d.label + ' <span style="font-weight:600; opacity:.75">' + d.num + '</span></button>';
+      h += '<button type="button" role="tab" aria-selected="' + (on ? 'true' : 'false') + '" data-tt-day="' + d.date + '" '
+        + 'style="cursor:pointer; position:relative; background:none; border:none; margin-bottom:-1px; padding:12px 20px; font-size:15px; font-weight:700; '
+        + 'border-bottom:3px solid ' + (on ? '#e9541a' : 'transparent') + '; '
+        + 'color:' + (on ? '#201e1d' : '#8a857f') + ';">'
+        + d.label + ' <span style="font-weight:600; opacity:.7">' + d.num + '</span></button>';
     });
     return h + '</div>';
   }
