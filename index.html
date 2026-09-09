@@ -783,9 +783,10 @@ class Component extends DCLogic {
 </script>
 <script>
 (function () {
-  var PXMIN = 1.7;   // pixelů na minutu (výška = délka eventu)
+  var PXMIN = 2.6;   // pixelů na minutu (výška = délka eventu); vyšší = čitelnější krátké eventy
   var SLOT = 30;     // rastr časové osy po 30 min
   var OPEN_MIN = 90; // náhradní délka pro eventy bez konce
+  var MIN_MIN = 26;  // minimální "vizuální" délka, aby se do krátkých buněk vešel text
 
   var VENUES = [
     { key: "beduinsky-stan", name: "Beduínský stan" },
@@ -802,10 +803,14 @@ class Component extends DCLogic {
   ];
 
   // Poznámky k danému dni (např. eventy bez pevného času, které nelze umístit na osu).
+  var RELAX_NOTE = "Od 18 hodin je v prostoru možné využít vyhřívanou relaxační zónu.";
   var NOTES = {
+    "2026-09-11": [RELAX_NOTE],
     "2026-09-12": [
+      RELAX_NOTE,
       "Fireshow (Beduínský stan) – přesný čas bude upřesněn pořadatelem, zakreslena u večerního bloku UBUNTU."
-    ]
+    ],
+    "2026-09-13": [RELAX_NOTE]
   };
 
   var TYPE_LABEL = { concert: "Koncert", workshop: "Workshop", lecture: "Přednáška", other: "Ostatní" };
@@ -824,15 +829,14 @@ class Component extends DCLogic {
     // Pátek — Beduínský stan
     { id: "fr-be-1", date: "2026-09-11", venue: "beduinsky-stan", start: "16:00", end: "16:45", title: "Cesty k poznání a vnitřnímu klidu", speaker: "Itarenamu – Jana & Radek Pilmaierovi", type: "concert" },
     { id: "fr-be-2", date: "2026-09-11", venue: "beduinsky-stan", start: "17:00", end: "17:20", title: "Stand Up Magic Show přítomného okamžiku", speaker: "Antony Brtnik", type: "other" },
-    { id: "fr-be-3", date: "2026-09-11", venue: "beduinsky-stan", start: "17:30", end: "18:45", title: "Social Steps – Soul, Funk & R&B", speaker: "Anet HBO", type: "concert" },
+    { id: "fr-be-3", date: "2026-09-11", venue: "beduinsky-stan", start: "17:45", end: "19:00", title: "Social Steps – Soul, Funk & R&B", speaker: "Anet HBO", type: "concert" },
     { id: "fr-be-4", date: "2026-09-11", venue: "beduinsky-stan", start: "20:00", end: "20:45", title: "Tvorba jako terapie i modlitba", speaker: "Jula Inka", type: "lecture" },
-    { id: "fr-be-5", date: "2026-09-11", venue: "beduinsky-stan", start: "21:00", end: "22:30", title: "Ecstatic dance", speaker: "Marko Ubuntu (Marek Šilpoch)", type: "other" },
+    { id: "fr-be-5", date: "2026-09-11", venue: "beduinsky-stan", start: "21:00", end: "22:30", title: "Ecstatic dance", speaker: "Marko Buntu (Marek Šilpoch)", type: "other" },
     // Pátek — Královská jurta
     { id: "fr-kj-1", date: "2026-09-11", venue: "kralovska-jurta", start: "17:15", end: "18:00", title: "Vrátit se domů", speaker: "Kiara Laud", type: "lecture" },
     { id: "fr-kj-2", date: "2026-09-11", venue: "kralovska-jurta", start: "18:15", end: "19:00", title: "Udělej si z nevýhody výhodu", speaker: "Adam Vopička & Pan Lynx", type: "lecture" },
     { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Návrat k přirozenosti", speaker: "Ctirad Macháně & Vládnemír", type: "lecture" },
-    // Pátek — Jurta Šamanka
-    { id: "fr-js-1", date: "2026-09-11", venue: "jurta-samanka", start: "19:15", end: "20:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
+    { id: "fr-kj-4", date: "2026-09-11", venue: "kralovska-jurta", start: "20:15", end: "21:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
     // Pátek — Venkovní hřiště
     { id: "fr-vh-1", date: "2026-09-11", venue: "venkovni-hriste", start: "17:20", end: "19:00", title: "Chladová terapie", speaker: "Libor Mattuš", type: "workshop" },
 
@@ -844,9 +848,8 @@ class Component extends DCLogic {
     // Sobota — Beduínský stan
     { id: "sa-be-1", date: "2026-09-12", venue: "beduinsky-stan", start: "08:30", end: "09:15", title: "Jógové probuzení s Maar", type: "workshop" },
     { id: "sa-be-2", date: "2026-09-12", venue: "beduinsky-stan", start: "10:00", end: "10:45", title: "Na první pohled neslučitelné směry", speaker: "Toman Equilibre", type: "lecture" },
-    { id: "sa-be-3", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Nastavení mysli: Od přežití ke smyslu", speaker: "Kryštof Jarmar", type: "lecture" },
     { id: "sa-be-4", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Poselství naděje a světla", speaker: "Marie Němcová", type: "concert" },
-    { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "13:00", end: "13:45", title: "Když úspěch nestačí (beseda)", speaker: "Elena Janota · Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
+    { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "12:00", end: "13:30", title: "Když úspěch nestačí (beseda)", speaker: "Elena Janota · Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
     { id: "sa-be-6", date: "2026-09-12", venue: "beduinsky-stan", start: "14:00", end: "14:45", title: "Playful Games for Connection with MAAR", type: "workshop" },
     { id: "sa-be-7", date: "2026-09-12", venue: "beduinsky-stan", start: "15:00", end: "15:35", title: "ENSOUL", speaker: "Petr Vaněk & Sára Bukovská", type: "concert" },
     { id: "sa-be-8", date: "2026-09-12", venue: "beduinsky-stan", start: "15:35", end: "16:30", title: "Vztah jako zahrada", speaker: "Petr Vaněk & Petra Vaněk Svarinská", type: "lecture" },
@@ -856,11 +859,11 @@ class Component extends DCLogic {
     { id: "sa-be-13", date: "2026-09-12", venue: "beduinsky-stan", start: "20:45", end: "22:15", title: "Ecstatic Dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
     // Sobota — Královská jurta
     { id: "sa-kj-1", date: "2026-09-12", venue: "kralovska-jurta", start: "09:00", end: "09:45", title: "Hudba v kontextu dvou odlišných kultur / Hlasový workshop", speaker: "Sarah Salloum", type: "workshop" },
-    { id: "sa-kj-2", date: "2026-09-12", venue: "kralovska-jurta", start: "10:00", end: "10:45", title: "Autorský koncert – Karu", type: "concert" },
+    { id: "sa-kj-2", date: "2026-09-12", venue: "kralovska-jurta", start: "10:30", end: "11:15", title: "Autorský koncert – Karu", type: "concert" },
     { id: "sa-kj-3", date: "2026-09-12", venue: "kralovska-jurta", start: "11:30", end: "12:30", title: "Sound healing a cacao ceremony s Kateřinou Rae", type: "workshop" },
     { id: "sa-kj-4", date: "2026-09-12", venue: "kralovska-jurta", start: "14:00", end: "14:45", title: "Co nás porod může naučit o životě", speaker: "Adéla Urbánková", type: "lecture" },
-    { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "16:30", end: "17:15", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
-    { id: "sa-kj-6", date: "2026-09-12", venue: "kralovska-jurta", start: "18:00", end: "18:45", title: "Půstem k sebelásce", speaker: "Tereza & Zuzana", type: "lecture" },
+    { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "16:30", end: "17:30", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
+    { id: "sa-kj-6", date: "2026-09-12", venue: "kralovska-jurta", start: "17:45", end: "19:00", title: "Nastavení mysli: Od přežití ke smyslu", speaker: "Kryštof Jarmar", type: "lecture" },
     // Sobota — Jurta Šamanka
     { id: "sa-js-1", date: "2026-09-12", venue: "jurta-samanka", start: "09:00", end: "09:45", title: "Můžeme mnohem víc, než si sami dovolíme věřit", speaker: "Ivana Melichová", type: "lecture" },
     { id: "sa-js-2", date: "2026-09-12", venue: "jurta-samanka", start: "10:00", end: "10:45", title: "Nemoc nezačíná jen na talíři", speaker: "Lucie Kořínková", type: "lecture" },
@@ -871,14 +874,15 @@ class Component extends DCLogic {
     // Neděle 13. 9. — Venkovní hřiště
     { id: "ne-vh-1", date: "2026-09-13", venue: "venkovni-hriste", start: "09:00", end: "10:00", title: "Jóga + hudební meditace", speaker: "Zuzana UnaRTé Zvolánková", type: "workshop" },
     // Neděle — Beduínský stan
-    { id: "ne-be-1", date: "2026-09-13", venue: "beduinsky-stan", start: "10:15", end: "12:15", title: "Kurz první pomoci", speaker: "Jan Čáha", type: "workshop" },
+    { id: "ne-be-1", date: "2026-09-13", venue: "beduinsky-stan", start: "10:45", end: "12:15", title: "Půstem k sebelásce", speaker: "Tereza & Zuzana", type: "lecture" },
     { id: "ne-be-2", date: "2026-09-13", venue: "beduinsky-stan", start: "13:45", end: "14:45", title: "Koncert", speaker: "Zuna", type: "concert" },
     { id: "ne-be-3", date: "2026-09-13", venue: "beduinsky-stan", start: "15:00", end: "16:00", title: "Koncert", speaker: "Daniel Sýkora", type: "concert" },
-    { id: "ne-be-4", date: "2026-09-13", venue: "beduinsky-stan", start: "16:15", end: "18:00", title: "Open mic naruby", speaker: "Adam Trnka", type: "other" },
+    { id: "ne-be-4", date: "2026-09-13", venue: "beduinsky-stan", start: "16:15", end: "18:00", title: "Open mic naruby", speaker: "Adam Trnka + kapela", type: "other" },
     { id: "ne-be-5", date: "2026-09-13", venue: "beduinsky-stan", start: "18:15", end: "19:15", title: "Kdyby srdce mluvilo", speaker: "Marty a Daniel", type: "concert" },
-    { id: "ne-be-6", date: "2026-09-13", venue: "beduinsky-stan", start: "19:30", end: "22:00", title: "Ecstatic dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
-    // Neděle — Jurta Šamanka
-    { id: "ne-js-1", date: "2026-09-13", venue: "jurta-samanka", start: "12:30", end: "13:30", title: "Z korporátu do džungle a zase zpátky", speaker: "Forest Ink", type: "lecture" }
+    { id: "ne-be-6", date: "2026-09-13", venue: "beduinsky-stan", start: "19:30", title: "Spontánní jam u ohně", type: "other" },
+    // Neděle — Královská jurta
+    { id: "ne-kj-1", date: "2026-09-13", venue: "kralovska-jurta", start: "10:15", end: "12:15", title: "Kurz první pomoci", speaker: "Jan Čáha", type: "workshop" },
+    { id: "ne-kj-2", date: "2026-09-13", venue: "kralovska-jurta", start: "12:30", end: "13:30", title: "Z korporátu do džungle a zase zpátky", speaker: "Forest Ink", type: "lecture" }
   ];
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
@@ -895,7 +899,7 @@ class Component extends DCLogic {
     if (e !== null && e < s) e += 1440;                 // event přesahuje půlnoc
     if (s < dayStart) { s += 1440; if (e !== null) e += 1440; } // začátek po půlnoci = stále tentýž den
     if (e === null) e = s + OPEN_MIN;
-    return { s: s, e: Math.max(e, s + 15) };
+    return { s: s, e: Math.max(e, s + 5) };
   }
 
   var state = { day: DAYS[0].date };
@@ -990,7 +994,7 @@ class Component extends DCLogic {
       items.forEach(function (it) {
         var e = it.e;
         var top = (it.s - dayStart) * PXMIN;
-        var h = (it.en - it.s) * PXMIN;
+        var h = Math.max((it.en - it.s), MIN_MIN) * PXMIN;
         var st = TYPE_STYLE[e.type];
         var timeStr = fmt(it.s) + "–" + (e.end ? fmt(it.en) : "…");
         var tip = timeStr + " · " + e.title + (e.speaker ? " · " + e.speaker : "");
