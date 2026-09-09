@@ -136,9 +136,9 @@
               Koupit vstupenku
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </a>
-            <a href="#festival" style="display:inline-flex; align-items:center; gap:9px; background:#fff; color:#201e1d; font-size:16px; font-weight:700; padding:15px 26px; border-radius:999px; border:1px solid rgba(32,30,29,.14)" style-hover="background:#faf7f2">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-              Více info
+            <a href="/uploads/ubuntu-festival-program.pdf" target="_blank" rel="noopener" download style="display:inline-flex; align-items:center; gap:9px; background:#fff; color:#201e1d; font-size:16px; font-weight:700; padding:15px 26px; border-radius:999px; border:1px solid rgba(32,30,29,.14)" style-hover="background:#faf7f2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Program &amp; medailonky (PDF)
             </a>
           </div>
 
@@ -338,7 +338,13 @@
             <div style="padding:48px; text-align:center; color:#8a857f">Načítám program…</div>
           </div>
         </div>
-        <p style="font-size:13px; color:#8a857f; margin-top:12px">Na mobilu tabulku posuneš doprava. Výška políček odpovídá délce programu; změny vyhrazeny.</p>
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-top:16px">
+            <p style="font-size:13px; color:#8a857f; margin:0">Na mobilu tabulku posuneš doprava. Výška políček odpovídá délce programu; změny vyhrazeny.</p>
+            <a href="/uploads/ubuntu-festival-program.pdf" target="_blank" rel="noopener" download style="display:inline-flex; align-items:center; gap:9px; background:linear-gradient(180deg,#ff6a22,#e9541a); color:#fff; font-size:15px; font-weight:700; padding:13px 22px; border-radius:999px; box-shadow:0 10px 22px -12px rgba(233,84,26,.75); white-space:nowrap" style-hover="filter:brightness(1.05)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Stáhnout celý program s medailonky (PDF)
+            </a>
+          </div>
       </div>
     </div>
   </section>
@@ -350,7 +356,7 @@
         <div style="position:relative">
           <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#a2521f; margin-bottom:16px">
             <span style="width:20px; height:2px; background:#ff5c14; border-radius:2px; display:block"></span>
-            Z��staň v obraze
+            Zůstaň v obraze
           </p>
           <h2 style="font-size:clamp(30px,3.4vw,50px); line-height:1.06; margin-bottom:16px; text-wrap:balance">Více informací na našich<br>sociálních sítích</h2>
           <p style="font-size:16.5px; line-height:1.7; color:#4a4643; max-width:52ch; margin:0 auto clamp(28px,3.5vw,40px)">Program, novinky a dění z příprav festivalu sdílíme průběžně. Přidej se k nám a nic ti neuteče.</p>
@@ -828,7 +834,7 @@ class Component extends DCLogic {
     { id: "fr-oh-3", date: "2026-09-11", venue: "ohniste", start: "22:30", title: "Jam u ohně", type: "other" },
     // Pátek — Beduínský stan
     { id: "fr-be-1", date: "2026-09-11", venue: "beduinsky-stan", start: "16:00", end: "16:45", title: "Cesty k poznání a vnitřnímu klidu", speaker: "Itarenamu – Jana & Radek Pilmaierovi", type: "concert" },
-    { id: "fr-be-2", date: "2026-09-11", venue: "beduinsky-stan", start: "17:00", end: "17:20", title: "Stand Up Magic Show přítomného okamžiku", speaker: "Antony Brtnik", type: "other" },
+    { id: "fr-be-2", date: "2026-09-11", venue: "beduinsky-stan", start: "17:00", end: "17:30", title: "Stand Up Magic Show přítomného okamžiku", speaker: "Antony Brtnik", type: "other" },
     { id: "fr-be-3", date: "2026-09-11", venue: "beduinsky-stan", start: "17:45", end: "19:00", title: "Social Steps – Soul, Funk & R&B", speaker: "Anet HBO", type: "concert" },
     { id: "fr-be-4", date: "2026-09-11", venue: "beduinsky-stan", start: "20:00", end: "20:45", title: "Tvorba jako terapie i modlitba", speaker: "Jula Inka", type: "lecture" },
     { id: "fr-be-5", date: "2026-09-11", venue: "beduinsky-stan", start: "21:00", end: "22:30", title: "Ecstatic dance", speaker: "Marko Buntu (Marek Šilpoch)", type: "other" },
@@ -910,13 +916,14 @@ class Component extends DCLogic {
   VENUES.forEach(function (v) { VENUE_NAME[v.key] = v.name; });
 
   function tabsHTML() {
-    var h = '<div data-tt-built="tabs" style="display:flex; flex-wrap:wrap; gap:10px">';
+    var h = '<div data-tt-built="tabs" role="tablist" aria-label="Dny festivalu" style="display:flex; flex-wrap:wrap; gap:2px; border-bottom:1px solid rgba(32,30,29,.14)">';
     DAYS.forEach(function (d) {
       var on = d.date === state.day;
-      h += '<button type="button" data-tt-day="' + d.date + '" style="cursor:pointer; border-radius:999px; padding:11px 20px; font-size:15px; font-weight:700; '
-        + 'border:1px solid ' + (on ? 'transparent' : 'rgba(32,30,29,.14)') + '; '
-        + (on ? 'background:linear-gradient(96deg,#ff6a22,#f0932b); color:#fff;' : 'background:#fff; color:#4a4643;')
-        + '">' + d.label + ' <span style="font-weight:600; opacity:.75">' + d.num + '</span></button>';
+      h += '<button type="button" role="tab" aria-selected="' + (on ? 'true' : 'false') + '" data-tt-day="' + d.date + '" '
+        + 'style="cursor:pointer; position:relative; background:none; border:none; margin-bottom:-1px; padding:12px 20px; font-size:15px; font-weight:700; '
+        + 'border-bottom:3px solid ' + (on ? '#e9541a' : 'transparent') + '; '
+        + 'color:' + (on ? '#201e1d' : '#8a857f') + ';">'
+        + d.label + ' <span style="font-weight:600; opacity:.7">' + d.num + '</span></button>';
     });
     return h + '</div>';
   }
@@ -1004,7 +1011,7 @@ class Component extends DCLogic {
         col += '<button type="button" data-tt-ev="' + e.id + '" title="' + esc(tip) + '" style="display:block; text-align:left; cursor:pointer; position:absolute; left:' + leftCalc + '; width:' + widthCalc + '; top:' + top + 'px; height:' + (h - 4) + 'px; overflow:hidden; background:' + st.bg + '; border:none; border-left:3px solid ' + st.bd + '; border-radius:9px; padding:6px 8px; box-sizing:border-box; font:inherit">'
           + '<div style="font-size:11px; font-weight:700; color:#8a5a2a; font-variant-numeric:tabular-nums; margin-bottom:2px">' + timeStr + '</div>'
           + '<div style="font-size:12.5px; font-weight:700; line-height:1.25; color:#201e1d">' + esc(e.title) + '</div>'
-          + (e.speaker ? '<div style="font-size:11.5px; line-height:1.3; color:#6b6560; margin-top:2px">' + esc(e.speaker) + '</div>' : '')
+          + (e.speaker ? '<div style="font-size:11.5px; font-weight:600; line-height:1.3; color:#47433f; margin-top:2px">' + esc(e.speaker) + '</div>' : '')
           + '<span style="position:absolute; right:5px; bottom:4px; width:16px; height:16px; border-radius:999px; background:rgba(255,255,255,.7); display:flex; align-items:center; justify-content:center; color:' + st.bd + '"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span>'
           + '</button>';
       });
