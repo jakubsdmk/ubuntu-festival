@@ -829,14 +829,16 @@ class Component extends DCLogic {
   ];
 
   // Poznámky k danému dni (např. eventy bez pevného času, které nelze umístit na osu).
-  var RELAX_NOTE = "Od 18 hodin je v prostoru možné využít vyhřívanou relaxační zónu.";
+  var RELAX_NOTE = "Od 20 hodin je v prostoru možné využít vyhřívanou relaxační zónu.";
+  var DOPROVOD_NOTE = "Doprovodný program po celou dobu festivalu: masáže, tetování, swap.";
   var NOTES = {
-    "2026-09-11": [RELAX_NOTE],
+    "2026-09-11": [RELAX_NOTE, DOPROVOD_NOTE],
     "2026-09-12": [
       RELAX_NOTE,
+      DOPROVOD_NOTE,
       "Fireshow (Beduínský stan) – přesný čas bude upřesněn pořadatelem, zakreslena u večerního bloku UBUNTU."
     ],
-    "2026-09-13": [RELAX_NOTE]
+    "2026-09-13": [RELAX_NOTE, DOPROVOD_NOTE]
   };
 
   var TYPE_LABEL = { concert: "Koncert", workshop: "Workshop", lecture: "Přednáška", other: "Ostatní" };
@@ -868,26 +870,27 @@ class Component extends DCLogic {
 
     // Sobota 12. 9. — Ohniště
     { id: "sa-oh-1", date: "2026-09-12", venue: "ohniste", start: "08:30", end: "10:00", title: "Tichá snídaně u ohně", type: "other" },
-    { id: "sa-oh-2", date: "2026-09-12", venue: "ohniste", start: "13:30", end: "15:00", title: "Zpívání v kruhu", speaker: "Phoenix Maria", type: "concert" },
+    { id: "sa-oh-5", date: "2026-09-12", venue: "ohniste", start: "21:55", end: "22:30", title: "Příběh odvahy", speaker: "Tomáš Paprštein", type: "other" },
     { id: "sa-oh-3", date: "2026-09-12", venue: "ohniste", start: "22:30", end: "23:15", title: "Příběhy, které patří k ohni", speaker: "Mikuláš Kopecký · Marcus Merlin & friends", type: "other" },
     { id: "sa-oh-4", date: "2026-09-12", venue: "ohniste", start: "23:15", title: "Jam u ohně", type: "other" },
     // Sobota — Beduínský stan
     { id: "sa-be-1", date: "2026-09-12", venue: "beduinsky-stan", start: "08:30", end: "09:15", title: "Jógové probuzení s Maar", type: "workshop" },
     { id: "sa-be-2", date: "2026-09-12", venue: "beduinsky-stan", start: "10:00", end: "10:45", title: "Na první pohled neslučitelné směry", speaker: "Toman Equilibre", type: "lecture" },
     { id: "sa-be-4", date: "2026-09-12", venue: "beduinsky-stan", start: "11:00", end: "11:45", title: "Poselství naděje a světla", speaker: "Marie Němcová", type: "concert" },
-    { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "12:00", end: "13:30", title: "Když úspěch nestačí (beseda)", speaker: "Elena Janota · Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
-    { id: "sa-be-6", date: "2026-09-12", venue: "beduinsky-stan", start: "14:00", end: "14:45", title: "Playful Games for Connection with MAAR", type: "workshop" },
+    { id: "sa-be-5", date: "2026-09-12", venue: "beduinsky-stan", start: "12:00", end: "13:15", title: "Když úspěch nestačí (beseda)", speaker: "Jakub Sodomka · Tomáš Zdražil · Kateřina Cibochová", type: "lecture" },
+    { id: "sa-be-14", date: "2026-09-12", venue: "beduinsky-stan", start: "13:30", end: "14:45", title: "Zpívání v kruhu", speaker: "Phoenix Maria", type: "concert" },
+    { id: "sa-be-6", date: "2026-09-12", venue: "beduinsky-stan", start: "16:15", end: "17:00", title: "Play, sing and connect with MAAR", type: "workshop" },
     { id: "sa-be-7", date: "2026-09-12", venue: "beduinsky-stan", start: "15:00", end: "15:35", title: "ENSOUL", speaker: "Petr Vaněk & Sára Bukovská", type: "concert" },
-    { id: "sa-be-8", date: "2026-09-12", venue: "beduinsky-stan", start: "15:35", end: "16:30", title: "Vztah jako zahrada", speaker: "Petr Vaněk & Petra Vaněk Svarinská", type: "lecture" },
+    { id: "sa-be-8", date: "2026-09-12", venue: "beduinsky-stan", start: "15:35", end: "16:15", title: "Vztah jako zahrada", speaker: "Petr Vaněk & Petra Vaněk Svarinská", type: "lecture" },
     { id: "sa-be-9", date: "2026-09-12", venue: "beduinsky-stan", start: "17:00", end: "17:45", title: "Do jemnosti, zranitelnosti a opravdovosti", speaker: "Lunaries", type: "concert" },
     { id: "sa-be-10", date: "2026-09-12", venue: "beduinsky-stan", start: "18:00", end: "18:45", title: "Bližší je mi lidskost než dokonalost", speaker: "Michal Juřička", type: "lecture" },
-    { id: "sa-be-11", date: "2026-09-12", venue: "beduinsky-stan", start: "19:00", end: "19:45", title: "UBUNTU – Nacházet to, co Nás spojuje", speaker: "Šimon Bilina, Šárka Bilinová, Adam Vopička, Sarah Salloum, Karu & Ctirad Macháně", type: "other" },
-    { id: "sa-be-13", date: "2026-09-12", venue: "beduinsky-stan", start: "20:45", end: "22:15", title: "Ecstatic Dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
+    { id: "sa-be-11", date: "2026-09-12", venue: "beduinsky-stan", start: "19:00", end: "20:30", title: "UBUNTU – Nacházet to, co Nás spojuje", speaker: "Šimon Bilina, Šárka Bilinová, Adam Vopička, Sarah Salloum, Karu & Ctirad Macháně", type: "other" },
+    { id: "sa-be-13", date: "2026-09-12", venue: "beduinsky-stan", start: "20:45", end: "23:00", title: "Ecstatic Dance", speaker: "DJ Satiwa / Míša Kuklová", type: "other" },
     // Sobota — Královská jurta
     { id: "sa-kj-1", date: "2026-09-12", venue: "kralovska-jurta", start: "09:00", end: "09:45", title: "Hudba v kontextu dvou odlišných kultur / Hlasový workshop", speaker: "Sarah Salloum", type: "workshop" },
     { id: "sa-kj-2", date: "2026-09-12", venue: "kralovska-jurta", start: "10:30", end: "11:15", title: "Autorský koncert – Karu", type: "concert" },
     { id: "sa-kj-3", date: "2026-09-12", venue: "kralovska-jurta", start: "11:30", end: "12:30", title: "Sound healing a cacao ceremony s Kateřinou Rae", type: "workshop" },
-    { id: "sa-kj-4", date: "2026-09-12", venue: "kralovska-jurta", start: "14:00", end: "14:45", title: "Co nás porod může naučit o životě", speaker: "Adéla Urbánková", type: "lecture" },
+    { id: "sa-kj-4", date: "2026-09-12", venue: "jurta-samanka", start: "14:00", end: "14:45", title: "Co nás porod může naučit o životě", speaker: "Adéla Urbánková", type: "lecture" },
     { id: "sa-kj-5", date: "2026-09-12", venue: "kralovska-jurta", start: "16:30", end: "17:30", title: "Finanční klid za každého počasí", speaker: "Jan Kamlach", type: "lecture" },
     { id: "sa-kj-6", date: "2026-09-12", venue: "kralovska-jurta", start: "17:45", end: "19:00", title: "Nastavení mysli: Od přežití ke smyslu", speaker: "Kryštof Jarmar", type: "lecture" },
     // Sobota — Jurta Šamanka
@@ -904,11 +907,12 @@ class Component extends DCLogic {
     { id: "ne-be-2", date: "2026-09-13", venue: "beduinsky-stan", start: "13:45", end: "14:45", title: "Koncert", speaker: "Zuna", type: "concert" },
     { id: "ne-be-3", date: "2026-09-13", venue: "beduinsky-stan", start: "15:00", end: "16:00", title: "Koncert", speaker: "Daniel Sýkora", type: "concert" },
     { id: "ne-be-4", date: "2026-09-13", venue: "beduinsky-stan", start: "16:15", end: "18:00", title: "Open mic naruby", speaker: "Adam Trnka + kapela", type: "other" },
-    { id: "ne-be-5", date: "2026-09-13", venue: "beduinsky-stan", start: "18:15", end: "19:15", title: "Kdyby srdce mluvilo", speaker: "Marty a Daniel", type: "concert" },
-    { id: "ne-be-6", date: "2026-09-13", venue: "beduinsky-stan", start: "19:30", title: "Spontánní jam u ohně", type: "other" },
+    { id: "ne-be-5", date: "2026-09-13", venue: "beduinsky-stan", start: "18:15", end: "19:15", title: "Kdyby srdce mluvilo + jam", speaker: "Marty a Daniel", type: "concert" },
+    { id: "ne-be-6", date: "2026-09-13", venue: "beduinsky-stan", start: "20:00", title: "Spontánní jam u ohně", type: "other" },
     // Neděle — Královská jurta
     { id: "ne-kj-1", date: "2026-09-13", venue: "kralovska-jurta", start: "10:15", end: "12:15", title: "Kurz první pomoci", speaker: "Jan Čáha", type: "workshop" },
-    { id: "ne-kj-2", date: "2026-09-13", venue: "kralovska-jurta", start: "12:30", end: "13:30", title: "Z korporátu do džungle a zase zpátky", speaker: "Forest Ink", type: "lecture" }
+    { id: "ne-kj-2", date: "2026-09-13", venue: "kralovska-jurta", start: "12:30", end: "13:30", title: "Z korporátu do džungle a zase zpátky", speaker: "Forest Ink", type: "lecture" },
+    { id: "ne-kj-3", date: "2026-09-13", venue: "kralovska-jurta", start: "20:00", end: "20:35", title: "Promítání dokumentu Tajemství Bosny", speaker: "Anežka Pohorská", type: "other" }
   ];
 
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
