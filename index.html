@@ -333,7 +333,10 @@
         </div>
         <div id="tt-tabs" style="margin-bottom:18px"></div>
         <div id="tt-note"></div>
-        <div style="overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid rgba(32,30,29,.1); border-radius:20px; background:#fff">
+        <style>
+          @media (max-width: 640px) { .tt-scroll { margin-left: 40px !important; } }
+        </style>
+        <div class="tt-scroll" style="overflow-x:auto; -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; border:1px solid rgba(32,30,29,.1); border-radius:20px; background:#fff">
           <div id="tt-root" style="min-width:940px">
             <div style="padding:48px; text-align:center; color:#8a857f">Načítám program…</div>
           </div>
