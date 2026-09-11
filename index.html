@@ -457,9 +457,13 @@
 
   <section style="padding:clamp(56px,7vw,104px) 32px; background:#fdfbf7">
     <div data-r="two" style="max-width:1240px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(36px,4.5vw,72px); align-items:center">
-      <div style="position:relative; border-radius:26px; overflow:hidden; box-shadow:0 30px 60px -36px rgba(32,30,29,.6); border:1px solid rgba(32,30,29,.06)">
-        <image-slot id="ubuntu-misto" shape="rect" src="./uploads/rehenicky-dvorek.jpeg" fit="cover" style="width:100%; height:clamp(320px,40vw,500px); display:block" placeholder="Řehenický dvorek"></image-slot>
-      </div>
+      <button type="button" data-lightbox="uploads/mapa-arealu.jpeg" aria-label="Zvětšit mapu areálu" style="display:block; width:100%; padding:0; border:1px solid rgba(32,30,29,.06); border-radius:26px; overflow:hidden; box-shadow:0 30px 60px -36px rgba(32,30,29,.6); background:#fff; cursor:zoom-in; position:relative">
+        <img src="uploads/mapa-arealu.jpeg" alt="Mapa areálu festivalu s vyznačenými lokacemi: Vstup, Ohniště, Jurta Šamanka, Královská jurta, Beduínský stan a Venkovní hřiště" style="width:100%; height:auto; display:block">
+        <span style="position:absolute; right:14px; bottom:14px; display:inline-flex; align-items:center; gap:7px; background:rgba(32,30,29,.72); color:#fff; font-size:12.5px; font-weight:700; padding:8px 13px; border-radius:999px; backdrop-filter:blur(4px)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path></svg>
+          Zvětšit mapu
+        </span>
+      </button>
       <div>
         <p style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#5c6b45; margin-bottom:16px">
           <span style="width:20px; height:2px; background:#7a8a5e; border-radius:2px; display:block"></span>
@@ -867,7 +871,7 @@ class Component extends DCLogic {
     // Pátek — Královská jurta
     { id: "fr-kj-1", date: "2026-09-11", venue: "kralovska-jurta", start: "17:15", end: "18:00", title: "Vrátit se domů", speaker: "Kiara Laud", type: "lecture" },
     { id: "fr-kj-2", date: "2026-09-11", venue: "kralovska-jurta", start: "18:15", end: "19:00", title: "Udělej si z nevýhody výhodu", speaker: "Adam Vopička & Pan Lynx", type: "lecture" },
-    { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Návrat k přirozenosti", speaker: "Ctirad Macháně & Vládnemír", type: "lecture" },
+    { id: "fr-kj-3", date: "2026-09-11", venue: "kralovska-jurta", start: "19:15", end: "20:00", title: "Návrat k přirozenosti", speaker: "Ctirad Mach��ně & Vládnemír", type: "lecture" },
     { id: "fr-kj-4", date: "2026-09-11", venue: "kralovska-jurta", start: "20:15", end: "21:00", title: "Vědomý přístup v hudebním průmyslu", speaker: "Ondřej „Andrethemanager“ Urbánek", type: "lecture" },
     // Pátek — Venkovní hřiště
     { id: "fr-vh-1", date: "2026-09-11", venue: "venkovni-hriste", start: "17:20", end: "19:00", title: "Chladová terapie", speaker: "Libor Mattuš", type: "workshop" },
@@ -1141,6 +1145,36 @@ class Component extends DCLogic {
   apply();
   var g = setInterval(guard, 300);
   setTimeout(function () { clearInterval(g); }, 15000);
+})();
+</script>
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Zvětšená mapa areálu" style="display:none; position:fixed; inset:0; z-index:120; background:rgba(20,18,17,.9); align-items:center; justify-content:center; padding:24px; cursor:zoom-out">
+  <button type="button" id="lightbox-close" aria-label="Zavřít" style="position:absolute; top:18px; right:18px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; border:none; border-radius:999px; background:rgba(255,255,255,.14); color:#fff; cursor:pointer">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="" style="max-width:min(1280px,100%); max-height:90vh; width:auto; height:auto; object-fit:contain; border-radius:14px; box-shadow:0 40px 90px -30px rgba(0,0,0,.8)">
+</div>
+<script>
+(function () {
+  var box = document.getElementById("lightbox");
+  var img = document.getElementById("lightbox-img");
+  function open(src, alt) {
+    img.src = src; img.alt = alt || "";
+    box.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+  function close() {
+    box.style.display = "none";
+    img.src = "";
+    document.body.style.overflow = "";
+  }
+  document.addEventListener("click", function (ev) {
+    var trigger = ev.target.closest("[data-lightbox]");
+    if (trigger) { open(trigger.getAttribute("data-lightbox"), trigger.querySelector("img") ? trigger.querySelector("img").alt : ""); return; }
+    if (ev.target === box || ev.target.closest("#lightbox-close")) close();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && box.style.display === "flex") close();
+  });
 })();
 </script>
 </body>
